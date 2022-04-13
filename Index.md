@@ -8,8 +8,6 @@ permalink: /
 
 # Buddy Compiler
 
-This is a temporary site to test the home page of the buddy compiler. 
-
 The buddy compiler is a domain-specific compiler infrastructure. We use "buddy" as the name because our infrastructure intends to be the buddy system to help users easily design, implement, and evaluate domain-specific compilers.
 The buddy compiler community welcomes any ideas. Join us through this [slack link](https://join.slack.com/t/buddycompiler/shared_invite/zt-13y6ibj4j-n6MQ8u9yCUPltCCDhLEmXg) if you want to contribute.
 
