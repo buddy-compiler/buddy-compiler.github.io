@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Display Boards
+title: DisplayBoards
 nav_order: 4
 has_children: true
 permalink: Pages/DisplayBoards
@@ -9,5 +9,3 @@ permalink: Pages/DisplayBoards
 # Display Boards
 
 Currently, we have the following display boards:
-
-- [Sync Status](./SyncStatus.md)
