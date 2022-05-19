@@ -8,7 +8,7 @@ parent: DisplayBoards
 
 Hi! I am the sync-bot of buddy compiler. Buddy compiler uses LLVM/MLIR as the submodules, and we are using the daily synchronizing strategy.
 
-**[2022-05-19 07:30:02] The following is the sync status:**
+**[2022-05-19 10:18:02] The following is the sync status:**
 
 [buddy-mlir] Convolution Optimization Example  <font color=green>successful</font>
 
@@ -52,23 +52,23 @@ Hi! I am the sync-bot of buddy compiler. Buddy compiler uses LLVM/MLIR as the su
 
 [buddy-benchmark] Audio Processing Case: audio-processing-benchmark <font color=green>successful</font>
 
-[buddy-benchmark] Deep Learning Case: conv-2d-nchw-fchw-benchmark <font color=red>error</font>
+[buddy-benchmark] Deep Learning Case: conv-2d-nchw-fchw-benchmark <font color=green>successful</font>
 
-[buddy-benchmark] Deep Learning Case: conv-2d-nhwc-hwcf-benchmark <font color=red>error</font>
+[buddy-benchmark] Deep Learning Case: conv-2d-nhwc-hwcf-benchmark <font color=green>successful</font>
 
-[buddy-benchmark] Deep Learning Case: depthwise-conv-2d-nhwc-hwc-benchmark <font color=red>error</font>
+[buddy-benchmark] Deep Learning Case: depthwise-conv-2d-nhwc-hwc-benchmark <font color=green>successful</font>
 
-[buddy-benchmark] Deep Learning Case: pooling-nhwc-sum-benchmark <font color=red>error</font>
+[buddy-benchmark] Deep Learning Case: pooling-nhwc-sum-benchmark <font color=green>successful</font>
 
-[buddy-benchmark] Deep Learning Case: inception-v3-benchmark <font color=red>error</font>
+[buddy-benchmark] Deep Learning Case: inception-v3-benchmark <font color=green>successful</font>
 
-[buddy-benchmark] Deep Learning Case: mobilenet-benchmark <font color=red>error</font>
+[buddy-benchmark] Deep Learning Case: mobilenet-benchmark <font color=green>successful</font>
 
-[buddy-benchmark] Deep Learning Case: mobilenet-v3-benchmark <font color=red>error</font>
+[buddy-benchmark] Deep Learning Case: mobilenet-v3-benchmark <font color=green>successful</font>
 
-[buddy-benchmark] Deep Learning Case: resnet_v2_50-benchmark <font color=red>error</font>
+[buddy-benchmark] Deep Learning Case: resnet_v2_50-benchmark <font color=green>successful</font>
 
-[buddy-benchmark] Image Processing Case: image-processing-benchmark <font color=red>error</font>
+[buddy-benchmark] Image Processing Case: image-processing-benchmark <font color=green>successful</font>
 
-🆘 Oops! The sync-bot has detected some errors and is working to fix them...
+✅ Sync to llvm-project d699e54ca291 .
 
