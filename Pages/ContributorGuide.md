@@ -150,15 +150,9 @@ systems and you may need to tweak them for Windows systems.
    ```shell
    cd buddy-mlir
    git pull https://github.com/buddy-compiler/buddy-mlir.git main
-   cd llvm
-   git pull git@github.com:llvm/llvm-project.git main
+   git submodule update --init --recursive
    ```
-
-   Copy commit ID of the recent llvm submodule branch from upstream buddy-mlir. Then use 
-
-   ```shell
-   git reset --hard <previously copied commit ID>
-   ```
+    And then build llvm and buddy-mlir to make sure your commits are based on the latest buddy-mlir.
 
     Note : You should build your changes against updated `buddy-mlir` and `llvm` submodule before opening a PR (Pull Request).
 
