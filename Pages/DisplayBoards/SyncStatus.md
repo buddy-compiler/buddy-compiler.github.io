@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Sync Status
-parent: DisplayBoards
+parent: Display Boards
 ---
 
 # Sync Status
