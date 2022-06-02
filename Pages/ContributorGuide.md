@@ -169,6 +169,12 @@ We welcome relevant and descriptive issues/feature requests for this project. De
 
 - Name files in a meaningful way.
 - Put copyright and license information in every relevant file.
-- All non-public definitions should reside in scope of enclosed by `namespace detail {...}`.
+- All non-public definitions should reside in scope enclosed by `namespace detail {...}`.
 - Use the provided `clang-format` file for applying appropriate formatting.
 - It is advisable to apply `clang-format` in a separate commit after making changes to the code.
+- Indent with 2 spaces while using a new line.
+- Remove any trailing whitespace at the end of each line.
+- Leave one single blank line at the end of each file.
+- Group variable declaration(s) and loops separately in files containing code.
+- Leave space after commas in .mlir files.
+- Leave space before and after '->', ':' and '=' in .mlir files.
