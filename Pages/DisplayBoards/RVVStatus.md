@@ -4,17 +4,17 @@ title: RVV Status
 parent: Display Boards
 ---
 
-# RISC-V Vector Toolchain Status
+# RISC-V Vector Extension Toolchain Status
 
 Hi! I am the sync-bot of buddy compiler, and I am responsible for updating the RISC-V toolchain and testing if the MLIR RVV support is working.
 
-**[2022-06-07 21:00:52] The following is the sync information and status.**
+**[2022-06-08 21:58:15] The following is the sync information and status.**
 
 ---
 ## LLVM Project
 **URL** https://github.com/llvm/llvm-project
 
-**Commit ID** 6468feaeaca7
+**Commit ID** 9e0dbd2a2a4a
 
 **Branch** main
 
