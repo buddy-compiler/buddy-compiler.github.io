@@ -8,7 +8,7 @@ parent: Display Boards
 
 Hi! I am the sync-bot of buddy compiler. Buddy compiler uses LLVM/MLIR as the submodules, and we are using the daily synchronizing strategy.
 
-**[2022-10-04 10:31:18] The following is the sync status:**
+**[2022-10-05 09:42:46] The following is the sync status:**
 
 [buddy-mlir] Convolution Optimization Example  <font color=green>successful</font>
 
@@ -60,17 +60,17 @@ Hi! I am the sync-bot of buddy compiler. Buddy compiler uses LLVM/MLIR as the su
 
 [buddy-benchmark] Deep Learning Case: pooling-nhwc-sum-benchmark <font color=green>successful</font>
 
-[buddy-benchmark] Deep Learning Case: inception-v3-benchmark <font color=green>successful</font>
+[buddy-benchmark] Deep Learning Case: inception-v3-benchmark <font color=red>error</font>
 
-[buddy-benchmark] Deep Learning Case: mobilenet-benchmark <font color=green>successful</font>
+[buddy-benchmark] Deep Learning Case: mobilenet-benchmark <font color=red>error</font>
 
-[buddy-benchmark] Deep Learning Case: mobilenet-v3-benchmark <font color=green>successful</font>
+[buddy-benchmark] Deep Learning Case: mobilenet-v3-benchmark <font color=red>error</font>
 
-[buddy-benchmark] Deep Learning Case: resnet_v2_50-benchmark <font color=green>successful</font>
+[buddy-benchmark] Deep Learning Case: resnet_v2_50-benchmark <font color=red>error</font>
 
 [buddy-benchmark] Image Processing Case: image-processing-benchmark CONSTANT_PADDING <font color=green>successful</font>
 
 [buddy-benchmark] Image Processing Case: image-processing-benchmark REPLICATE_PADDING <font color=green>successful</font>
 
-✅ Sync to llvm-project bd561ca66b78 .
+🆘 Oops! The sync-bot has detected some errors and is working to fix them...
 
