@@ -10,6 +10,8 @@ Currently, we provide open projects in the following directions.
 
 ## 1 - Domain-specific Compiler
 
+[Buddy Compiler DIP&DAP Work Plan](https://www.notion.so/buddycompiler/0e4297fd86774c3c9d53e461a933c4e7?v=3f4310b7121a4be88de719e7ac1a208c)
+
 ### Project 1-1: Adding a Compiler Stack for RISC-V Custom Extensions.
 
 - **Description**: Both RISC-V and MLIR are modular and extensible, so we hope to use LLVM/MLIR to implement an integrated compiler stack infrastructure for RISC-V custom ISA.
@@ -95,3 +97,7 @@ Currently, we provide open projects in the following directions.
     - Basic software testing knowledge and experience.
 - **Possible mentors**: Hongbin Zhang, Prathamesh Tagore
 - **Difficulty rating**: Easy - Medium
+
+## 5 - Buddy Compiler As A Service
+
+[Buddy-CAAS Work Plan](https://buddycompiler.notion.site/Buddy-CAAS-Work-Plan-9e7eea61ddb04ea696599d904f2327a5)
