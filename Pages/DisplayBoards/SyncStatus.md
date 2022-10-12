@@ -8,7 +8,7 @@ parent: Display Boards
 
 Hi! I am the sync-bot of buddy compiler. Buddy compiler uses LLVM/MLIR as the submodules, and we are using the daily synchronizing strategy.
 
-**[2022-10-11 16:11:57] The following is the sync status:**
+**[2022-10-12 09:03:10] The following is the sync status:**
 
 [buddy-mlir] Convolution Optimization Example  <font color=green>successful</font>
 
@@ -26,7 +26,7 @@ Hi! I am the sync-bot of buddy compiler. Buddy compiler uses LLVM/MLIR as the su
 
 [buddy-mlir] MLIR Linalg Example: linalg-conv2d-run <font color=green>successful</font>
 
-[buddy-mlir] MLIR Linalg Example: linalg-conv2d-tiling-run <font color=green>successful</font>
+[buddy-mlir] MLIR Linalg Example: linalg-conv2d-tiling-run <font color=red>error</font>
 
 [buddy-mlir] MLIR MemRef Example: memref-subview-run <font color=green>successful</font>
 
@@ -72,5 +72,5 @@ Hi! I am the sync-bot of buddy compiler. Buddy compiler uses LLVM/MLIR as the su
 
 [buddy-benchmark] Image Processing Case: image-processing-benchmark REPLICATE_PADDING <font color=green>successful</font>
 
-✅ Sync to llvm-project b879f99f0ec0 .
+🆘 Oops! The sync-bot has detected some errors and is working to fix them...
 
