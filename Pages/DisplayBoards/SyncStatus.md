@@ -8,7 +8,7 @@ parent: Display Boards
 
 Hi! I am the sync-bot of buddy compiler. Buddy compiler uses LLVM/MLIR as the submodules, and we are using the daily synchronizing strategy.
 
-**[2022-10-12 09:46:27] The following is the sync status:**
+**[2022-10-16 12:16:09] The following is the sync status:**
 
 [buddy-mlir] Convolution Optimization Example  <font color=green>successful</font>
 
@@ -72,5 +72,5 @@ Hi! I am the sync-bot of buddy compiler. Buddy compiler uses LLVM/MLIR as the su
 
 [buddy-benchmark] Image Processing Case: image-processing-benchmark REPLICATE_PADDING <font color=green>successful</font>
 
-✅ Sync to llvm-project 2749b942e90b .
+✅ Sync to llvm-project de49627d9d29 .
 
