@@ -8,11 +8,11 @@ parent: Display Boards
 
 Hi! I am the sync-bot of buddy compiler. Buddy compiler uses LLVM/MLIR as the submodules, and we are using the daily synchronizing strategy.
 
-**[2022-10-19 12:17:22] The following is the sync status:**
+**[2022-10-20 17:56:49] The following is the sync status:**
 
-[buddy-mlir] Convolution Optimization Example  <font color=red>error</font>
+[buddy-mlir] Convolution Optimization Example  <font color=green>successful</font>
 
-[buddy-mlir] DIP Dialect Corr2D Example  <font color=red>error</font>
+[buddy-mlir] DIP Dialect Corr2D Example  <font color=green>successful</font>
 
 [buddy-mlir] Bud Dialect Example: bud-array-attr-lower <font color=green>successful</font>
 
@@ -50,7 +50,7 @@ Hi! I am the sync-bot of buddy compiler. Buddy compiler uses LLVM/MLIR as the su
 
 [buddy-mlir] JIT benchmark <font color=green>successful</font>
 
-[buddy-benchmark] Audio Processing Case: audio-processing-benchmark <font color=green>successful</font>
+[buddy-benchmark] Audio Processing Case: audio-processing-benchmark <font color=red>error</font>
 
 [buddy-benchmark] Deep Learning Case: conv-2d-nchw-fchw-benchmark <font color=green>successful</font>
 
