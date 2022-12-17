@@ -41,7 +41,13 @@ If you wish to contribute a new feature or a bug fix, please follow the workflow
   infrastructure configuration via direct commits (CAUTION!)
 - **DO NOT** mix independent, unrelated changes in one PR.
   Separate unrelated fixes into separate PRs, especially if they are in different components of the project.
-- **DO** give PRs short-but-descriptive names (e.g. "Add test for algorithm XXX", not "Fix #1234").
+- **DO** give PRs short-but-descriptive names (e.g. "[subsection_tag] Add test for algorithm XXX", 
+  not "Fix #1234").
+- **DO** name your PR in a meaningful manner and start with a relevant tag for the targeted 
+  subsection of the project (Ex. [DIP] Develop support for Fast Fourier Transform, [DIP] replace 
+  C-style variadic function with std::vector, etc.). 
+- **DO** provide a description summarising the proposed changes in your PR. This is a good place to 
+  cite related issues and other PRs in context of your work as well. 
 - **DO** [refer](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/autolinked-references-and-urls) to any 
   relevant issues, and include the [keywords](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue) 
   that automatically close issues when the PR is merged.
