@@ -13,6 +13,8 @@ The buddy compiler community welcomes any ideas. Join us through this [slack lin
 
 [View it on GitHub](https://github.com/buddy-compiler){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
 
+[Projects](https://buddycompiler.notion.site/7f92ee739453461d956b5b4e4bb73bf1?v=70f2180e94ce4f7fa5bac01f4b47b98e&pvs=4){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+
 ## Motivation
 
 With the development of domain-specific architectures and languages, the need for compilers has grown, and the research of compiler technology has reached a golden age. Implementing an end-to-end compiler from scratch for a new DSA or DSL is difficult. Our goal is to provide a framework to help users quickly implement a domain-specific compiler, including DSL frontend support, IR-level optimization, and DSA backend code generation. 
