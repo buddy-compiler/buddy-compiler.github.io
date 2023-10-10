@@ -11,9 +11,13 @@ permalink: /
 The buddy compiler is a domain-specific compiler infrastructure. We use "buddy" as the name because our infrastructure intends to be the buddy system to help users easily design, implement, and evaluate domain-specific compilers.
 The buddy compiler community welcomes any ideas. Join us through this [slack link](https://join.slack.com/t/buddycompiler/shared_invite/zt-13y6ibj4j-n6MQ8u9yCUPltCCDhLEmXg) if you want to contribute.
 
-[View it on GitHub](https://github.com/buddy-compiler){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+[View it on GitHub](https://github.com/buddy-compiler){: .btn .btn-primary .fs-4 .mb-4 .mb-md-0 .mr-1 }
 
-[Projects](https://buddycompiler.notion.site/7f92ee739453461d956b5b4e4bb73bf1?v=70f2180e94ce4f7fa5bac01f4b47b98e&pvs=4){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+[Projects](https://buddycompiler.notion.site/7f92ee739453461d956b5b4e4bb73bf1?v=70f2180e94ce4f7fa5bac01f4b47b98e&pvs=4){: .btn .btn-primary .fs-4 .mb-4 .mb-md-0 .mr-1 }
+
+[Tasks](https://buddycompiler.notion.site/3f4b8e480d6e447dbd4c3b3e21fa1208?v=8dc8526cba2245a98a726be1c08e0f6b&pvs=4){: .btn .btn-primary .fs-4 .mb-4 .mb-md-0 .mr-1 }
+
+[Team](https://buddycompiler.notion.site/c912d8237b79409c89cf46b432b6a3ca?v=186d4ed4b9fa4452a08ca5af0921208a&pvs=4){: .btn .btn-primary .fs-4 .mb-4 .mb-md-0 .mr-1 }
 
 ## Motivation
 
