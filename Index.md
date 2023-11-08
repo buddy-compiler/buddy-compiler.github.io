@@ -47,13 +47,12 @@ The graph below shows the modules of the buddy compiler.
 
 ## Publications and Presentations
 
-Compiler Technologies in Deep Learning Co-Design: A Survey - [Link](https://spj.science.org/doi/10.34133/icomputing.0040)
-
-Buddy Compiler @ EuroLLVM 2023
-- Buddy Compiler: An MLIR-based Compilation Framework for Deep Learning Co-design - [Link](https://www.youtube.com/watch?v=EELBpBA-XCE)
-- RISC-V Vector Extension Support in MLIR: Motivation, Abstraction, and Application - [Link](https://www.youtube.com/watch?v=i9dsjzVOvy8)
-- Image Processing Ops as first class citizens in MLIR: write once, vectorize everywhere! - [Link](https://www.youtube.com/watch?v=0xQ2lDY9RCw)
-- Buddy-CAAS: Compiler As A Service for MLIR - [Link](https://www.youtube.com/watch?v=f7USv-oAtvI)
+- Compiler Technologies in Deep Learning Co-Design: A Survey - [Link](https://spj.science.org/doi/10.34133/icomputing.0040)
+- Buddy Compiler @ EuroLLVM 2023
+    - Buddy Compiler: An MLIR-based Compilation Framework for Deep Learning Co-design - [Link](https://www.youtube.com/watch?v=EELBpBA-XCE)
+    - RISC-V Vector Extension Support in MLIR: Motivation, Abstraction, and Application - [Link](https://www.youtube.com/watch?v=i9dsjzVOvy8)
+    - Image Processing Ops as first class citizens in MLIR: write once, vectorize everywhere! - [Link](https://www.youtube.com/watch?v=0xQ2lDY9RCw)
+    - Buddy-CAAS: Compiler As A Service for MLIR - [Link](https://www.youtube.com/watch?v=f7USv-oAtvI)
 
 
 ## Next Steps

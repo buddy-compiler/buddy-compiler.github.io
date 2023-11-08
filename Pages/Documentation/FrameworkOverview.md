@@ -6,7 +6,7 @@ parent: Documentation
 
 ## Framework Overview
 
-As shown in following figure, the framework has two sub-modules. One is the compiler framework to develop the compiler tool-chain, and the other is the benchmark framework to evaluate the performance. Our
+As shown in following figure, the framework has open sourced two modules. One is the compiler framework to develop the compiler tool-chain, and the other is the benchmark framework to evaluate the performance. Our
 approach is implemented in the compiler framework and evaluated in the benchmark framework.
 
 ![FrameworkOverview](../../Images/overview.png)

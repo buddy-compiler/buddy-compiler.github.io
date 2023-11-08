@@ -12,25 +12,14 @@ If you wish to contribute a new feature or a bug fix, please follow the workflow
 
 - [Prerequisites](#prerequisites)
 - [Pull Requests](#pull-requests)
-- [Getting started with Git workflow](#getting-started-with-git-workflow)
-  - [1. Clone the project and update submodule(s)](#clone-the-project-and-update-submodules)
-  - [2. Build and test LLVM/MLIR](#build-and-test-llvmmlir)
-  - [3. Build buddy-mlir](#build-buddy-mlir-)
-  - [4. Submit a pull request](#submitting-a-pull-request-)
-  - [5. Submitting an Issue/Feature request](#submitting-an-issuefeature-request-)
-- [Contributor guidelines](#contributor-guidelines-)
+- [Submitting a Pull Request](#submitting-a-pull-request-)
+- [Submitting an Issue/Feature Request](#submitting-an-issuefeature-request-)
+- [Contributor Guidelines](#contributor-guidelines-)
 
 ## Prerequisites
 
-- C++11 compiler
 - Experience with `git` command line basics.
 - Familiarity with build toolset and development environment of your choice.
-- Installed/built from source distribution of `OpenCV` >= `OpenCV3.0 ` 
-- For running all examples present in `buddy-mlir/examples/ConvOpt/comparison/`, you should have latest versions of following frameworks/libraries : 
-  - PyTorch
-  - TensorFlow
-  - ONNX runtime
-  - tvm
 
 ## Pull Requests
 
@@ -67,63 +56,6 @@ If you wish to contribute a new feature or a bug fix, please follow the workflow
   merge recording a merge commit may include (but are not limited to):
   - The change is easier to understand as a series of focused commits.
     Each commit in the series must be buildable so as not to break git bisect.
-
-## Getting started with Git workflow
-
-**NOTE:** For brevity, commands below use notation for POSIX-like operating
-systems and you may need to tweak them for Windows systems.
-
-### Clone the project and update submodule(s)
-
-1. Clone the project : 
-
-   ```shell
-   git clone git@github.com:buddy-compiler/buddy-mlir.git
-   cd buddy-mlir
-   ```
-
-2. Update submodule(s) : 
-
-   ```shell
-   git submodule update --init
-   ```
-
-### Build and test LLVM/MLIR
-
-1. Build LLVM : 
-
-   ```shell
-   mkdir llvm/build
-   cd llvm/build
-   cmake -G Ninja ../llvm \
-     -DLLVM_ENABLE_PROJECTS="mlir" \
-     -DLLVM_TARGETS_TO_BUILD="host;RISCV" \
-     -DLLVM_ENABLE_ASSERTIONS=ON \
-     -DCMAKE_BUILD_TYPE=RELEASE
-   ninja
-   ```
-
- 2. Test MLIR : 
-
-    ```shell
-    ninja check-mlir
-    ```
-
-### Build buddy-mlir : 
-
- ```shell
- cd ..
- mkdir build
- cd build
- cmake -G Ninja .. \
-    -DMLIR_DIR=$PWD/../llvm/build/lib/cmake/mlir \
-    -DLLVM_DIR=$PWD/../llvm/build/lib/cmake/llvm \
-    -DLLVM_ENABLE_ASSERTIONS=ON \
-    -DCMAKE_BUILD_TYPE=RELEASE
- ninja check-buddy
- ```
-
- You can refer [this](https://github.com/buddy-compiler/buddy-mlir#dialects) doc for getting familiar with basics of each dialect and how to use the provided code.
 
 ## Submitting a Pull Request : 
 
@@ -165,13 +97,13 @@ systems and you may need to tweak them for Windows systems.
 7. Follow [this](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)
    for opening a pull request using GitHub GUI.
 
-## Submitting an Issue/Feature request : 
+## Submitting an Issue/Feature Request : 
 
 We welcome relevant and descriptive issues/feature requests for this project. Deafault templates are provided for creating both of them. Although it is recommended to use provided templates while creating an issue/feature request, it is not a compulsion and you can choose not to use them. Please ensure that your request/issue is self-explanable and provides sufficient technical info in latter case.
 
 
 
-## Contributor guidelines : 
+## Contributor Guidelines : 
 
 - Name files in a meaningful way.
 - Put copyright and license information in every relevant file.

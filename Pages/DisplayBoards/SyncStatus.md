@@ -6,7 +6,7 @@ parent: Display Boards
 
 # Sync Status
 
-Hi! I am the sync-bot of buddy compiler. Buddy compiler uses LLVM/MLIR as the submodules, and we are using the daily synchronizing strategy.
+Hi! I am the sync-bot of buddy compiler. Buddy compiler uses LLVM/MLIR as the submodules, and ~~we are using the daily synchronizing strategy~~.
 
 **[2022-12-17 20:49:22] The following is the sync status:**
 
