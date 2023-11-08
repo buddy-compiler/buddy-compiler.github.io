@@ -8,8 +8,9 @@ permalink: /
 
 # Buddy Compiler
 
-The buddy compiler is a domain-specific compiler infrastructure. We use "buddy" as the name because our infrastructure intends to be the buddy system to help users easily design, implement, and evaluate domain-specific compilers.
-The buddy compiler community welcomes any ideas. Join us through this [slack link](https://join.slack.com/t/buddycompiler/shared_invite/zt-13y6ibj4j-n6MQ8u9yCUPltCCDhLEmXg) if you want to contribute.
+Buddy Compiler is a domain-specific compiler infrastructure. We use "buddy" as the name because we want to build a buddy system to help users easily design, implement, and evaluate domain-specific compilers. 
+
+Buddy Compiler community is an open source community, where we explore intriguing features and implement ideas for compiler infrastructure by working together. Join us through [this slack link](https://join.slack.com/t/buddycompiler/shared_invite/zt-13y6ibj4j-n6MQ8u9yCUPltCCDhLEmXg) if you want to contribute.
 
 [GitHub](https://github.com/buddy-compiler){: .btn .btn-primary .fs-4 .mb-4 .mb-md-0 .mr-1 }
 [Projects](https://buddycompiler.notion.site/7f92ee739453461d956b5b4e4bb73bf1?v=70f2180e94ce4f7fa5bac01f4b47b98e&pvs=4){: .btn .btn-primary .fs-4 .mb-4 .mb-md-0 .mr-1 }
@@ -18,11 +19,13 @@ The buddy compiler community welcomes any ideas. Join us through this [slack lin
 
 ## Motivation
 
-With the development of domain-specific architectures and languages, the need for compilers has grown, and the research of compiler technology has reached a golden age. Implementing an end-to-end compiler from scratch for a new DSA or DSL is difficult. Our goal is to provide a framework to help users quickly implement a domain-specific compiler, including DSL frontend support, IR-level optimization, and DSA backend code generation. 
+Our goal is to address the challenges of combining domain-specific languages (DSLs) and domain-specific architectures (DSAs) by providing our compiler-level infrastructure, Buddy Compiler. Built on top of [MLIR](https://mlir.llvm.org/) and [RISC-V](https://riscv.org/), Buddy Compiler aims to create a unified ecosystem that unlocks more software-hardware co-design opportunities. Such ecosystem can simplify the development process and accelerate optimize performance, making it easy for users to develop their own compilers.
 
-MLIR is a revolutionary multi-level intermediate representation and compiler infrastructure that provides reusable and extensible mechanisms. RISC-V is open-sourced instruction set architecture with a modular design, allowing custom extensions. MLIR and RISC-V have extensible concepts for domain-specific design and maximize the reuse of base parts. We thus particularly embrace the MLIR and RISC-V ecosystems for our framework and believe MLIR is a perfect companion for compiler development towards the RISC-V backend. As for the DSL frontend support, we do not have a clear plan and looking forward to more discussion.
+With the rapid development of applications demanded for high computing power, general-purpose processors can not meet computing needs in the context of expiration of Moore’s Law. By utilizing DSLs and DSAs, developers can leverage the benefits of both to optimize the performance and efficiency of the computations within a targeted domain. However, Combining DSLs and DSAs presents some challenges in various aspects, including development complexity, performance trade-offs, and tooling support. Our goal is to provide an infrastructure at the compiler level to explore solutions to these problems.
 
-Our work is still in the very early stages, and we are currently exploring IR-level optimization and building infrastructures. For more information, please see our [documents](https://github.com/buddy-compiler/buddy-mlir/tree/main/docs) and [open projects](./Pages/OpenProjects.md).
+The combined DSL-DSA solutions involve various software-hardware co-design techniques. We claim that a unified ecosystem can get more opportunities for co-design, and we particularly embrace the MLIR and RISC-V ecosystem. MLIR is a revolutionary multi-level intermediate representation and compiler infrastructure that provides reusable and extensible mechanisms. RISC-V is an open-sourced instruction set architecture with a modular design for custom extensions. Both MLIR and RISC-V have extensible concepts to maximize the reuse of base parts, which is suitable for domain-specific design. Buddy Compiler is based on MLIR and has specific support for RISC-V, especially with respect to vectorization.
+
+For more information, please see our [documents](https://github.com/buddy-compiler/buddy-mlir/tree/main/docs) and [open projects](./Pages/OpenProjects.md).
 
 ## Overview
 
@@ -30,7 +33,7 @@ Currently, the buddy compiler contains the following two modules:
 
 - buddy-mlir (get started from [here](https://github.com/buddy-compiler/buddy-mlir))
 
-The buddy-mlir is the MLIR-based domain-specific compiler framework. We use MLIR as the cornerstone and explore how to build a domain-specific compiler on top of it. Our research in this framework includes domain-specific IR and optimization, domain-specific compiler frontend and backend implementation, MLIR-related development tools, etc.
+The buddy-mlir is the main framework of Buddy Compiler. We use MLIR as the cornerstone and explore how to build a domain-specific compiler on top of it. Our research in this framework includes DSL frontend support, IR-level optimization, DSA backend code generation, MLIR-related development tools, etc.
 
 - buddy-benchmark (get started from [here](https://github.com/buddy-compiler/buddy-benchmark))
 
