@@ -12,6 +12,8 @@ Buddy Compiler is a domain-specific compiler infrastructure. We use "buddy" as t
 
 Buddy Compiler community is an open source community, where we explore intriguing features and implement ideas for compiler infrastructure by working together. Join us through [this slack link](https://join.slack.com/t/buddycompiler/shared_invite/zt-13y6ibj4j-n6MQ8u9yCUPltCCDhLEmXg) if you want to contribute.
 
+Buddy Compiler As A Service (Buddy-CAAS) is an online platform that serves users and developers to configure the pass pipeline and demonstrate on multiple backends quickly and smoothly. Click [here](https://buddy.isrc.ac.cn/) to explore and experiment with our online platform. For more details, please see [Buddy-CAAS documentation](./Pages/Documentation/CAAS.md).
+
 [GitHub](https://github.com/buddy-compiler){: .btn .btn-primary .fs-4 .mb-4 .mb-md-0 .mr-1 }
 [Projects](https://buddycompiler.notion.site/7f92ee739453461d956b5b4e4bb73bf1?v=70f2180e94ce4f7fa5bac01f4b47b98e&pvs=4){: .btn .btn-primary .fs-4 .mb-4 .mb-md-0 .mr-1 }
 [Tasks](https://buddycompiler.notion.site/3f4b8e480d6e447dbd4c3b3e21fa1208?v=8dc8526cba2245a98a726be1c08e0f6b&pvs=4){: .btn .btn-primary .fs-4 .mb-4 .mb-md-0 .mr-1 }
