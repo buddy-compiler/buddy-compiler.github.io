@@ -6,7 +6,7 @@ parent: Documentation
 
 ## Buddy Compiler As A Service (Buddy-CAAS)
 
-![Buddy-CAAS](../../Images/buddy-caas.pdf)
+![Buddy-CAAS](../../Images/buddy-caas.png)
 
 ### ABSTRACT
 
