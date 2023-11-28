@@ -1,5 +1,5 @@
 # theme: jekyll-theme-architect
-remote_theme: zhanghb97/just-the-docs
+# remote_theme: zhanghb97/just-the-docs
 title: Buddy Compiler
 description: Domain Specific Compiler Infrastructure
 markdown: kramdown
@@ -7,3 +7,4 @@ url: "https://buddy-compiler.github.io"
 sidebar: true
 color_scheme: buddy
 logo: "./Images/buddy-compiler-logo.png"
+theme: just-the-docs
