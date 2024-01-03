@@ -210,7 +210,7 @@ We define intrinsic operations for `gemmini` dialect in file `midend/include/Dia
 
 The logic is in `midend/include/Dialect/Gemmini/CMakeLists.txt` 
 
-```Shell
+```shell
 add_mlir_dialect(Gemmini gemmini)
 add_mlir_doc(Gemmini Gemmini Dialects/ -gen-dialect-doc)
 
@@ -221,7 +221,7 @@ add_public_tablegen_target(BuddyGemminiConversionsIncGen)
 
 We use `tablegen` to generate the relevant files, and it also generates `GemminiConversions.inc`. This file guides the conversion of the preceding Intrinsic ops. Below is an example, refer to the complete code in file`build/midend/include/Dialect/Gemmini/GemminiConversions.inc`。
 
-```C++
+```c++
 if (auto op = dyn_cast<::buddy::gemmini::ComputeAccumulated_IntrOp>(opInst)) {
 
     llvm::Module *module = builder.GetInsertBlock()->getModule();
@@ -304,7 +304,7 @@ The main logic is in `midend/lib/Dialect/Gemmini/Transforms/LegalizeForLLVMExpor
 - `populateGemminiLegalizeForLLVMExportPatterns`
 * This function defines the patterns for lowering, adding all `gemmini operation` lowerings to the patterns.
 
-```C++
+```c++
 void mlir::configureGemminiLegalizeForExportTarget(
     LLVMConversionTarget &target) {
   target.addLegalOp<
@@ -350,7 +350,7 @@ void mlir::populateGemminiLegalizeForLLVMExportPatterns(
 
 Meanwhile, we noticed that the preceding `print` does not have corresponding `lowering` functions, and there is no `runOnOperation` function in the above files. Finally, we found these missing parts in the `midend/lib/Conversion/LowerGemmini/LowerGemminiPass.cpp` file (**in fact, I believe these two files should be merged into one**).
 
-```C++
+```c++
 void LowerGemminiToLLVMPass::runOnOperation() {
   MLIRContext *context = &getContext();
   ModuleOp module = getOperation();
@@ -386,7 +386,7 @@ void LowerGemminiToLLVMPass::runOnOperation() {
 
 The main logic is in `midend/lib/Target/LLVMIR/Dialect/Gemmini/GemminiToLLVMIRTranslation.cpp`. This file implements the translation interface from the `Gemmini dialect` to `LLVM IR`. Since the code is minimal, we'll directly bring it over:
 
-```C++
+```c++
 namespace {
 /// Implementation of the dialect interface that converts operations belonging
 /// to the Gemmini dialect to LLVM IR.
