@@ -4,7 +4,7 @@ title: Collaboration System Guide
 parent: Documentation
 ---
 
-# GPUCompilerStack
+# GPUCompilationstack
 
 This article will introduce in detail the GPU compilation stack of the mainstream deep learning compilers.
 
