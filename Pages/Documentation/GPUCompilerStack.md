@@ -1760,3 +1760,279 @@ A complete OpenCL program execution flow is as follows:
 * Private Memory: A private area of a work item that is not visible to other work items. It is usually mapped to a register in hardware implementation.
 
 In OpenCL, the data content in global memory is represented by storage objects (Memory Object). The two most commonly used storage objects in OpenCL are: `Buffer Objects` and `Image Objects`.
+
+## OPENACC
+
+In order to support openacc, the clang compiler proposed clacc, which converts OpenAcc into OpenMP, and then uses the existing OpenMp compiler and runtime in clang for support. The overall process is as follows:
+
+```
+OpenACC source
+     |
+     | parser
+     v
+OpenACC AST
+     |
+     | TransformACCToOMP
+     v
+OpenMP AST
+     |
+     | codegen
+     v
+  LLVM IR
+     |
+     | LLVM
+     v
+executable
+OpenACC runtime
+OpenMP runtime
+```
+
+1. clacc converts OpenACC source code into OpenACC AST by extending clang parser in the paser stage.
+
+2. Use the TransformAccToOMP module to convert OpenACC AST to OpenMP AST
+
+3. Use CodenGen to convert OpenMP AST generation into llvm ir, and use llvm to compile it into an executable file.
+
+4. The OpenACC runtime is built on LLVM’s existing OpenMP runtime and provides extensions for OpenACC’s runtime environment variables, library API, etc.
+
+The benefits of this design are: first, building the OpenACC AST should help develop additional OpenACC source-level tools, and building the OpenMP AST should help implement many non-traditional user-level compiler functions, such as automatically porting OpenACC applications to OpenMP , as well as reusing existing OpenMP tools for OpenACC. Since OpenACC syntax and OpenMP syntax are very similar, it is easier to implement a simple conversion from OpenACC to OpenMP at the AST level than at a subsequent compiler stage. Finally, since the AST is the highest level representation, implementing at the AST level maximizes the reuse of existing OpenMP implementations in Clacc.
+
+### TransformACCToOMP
+
+A key issue in converting OpenACC to OpenMP's Clang AST is that the Clang AST is designed to be immutable once built. This immutability property might initially appear to make Clacc's TransformACCToOMP component unimplementable, but that's not actually the case. In this section, we describe Clang's TreeTransform tool and explain how TransformACCToOMP uses it to neatly bypass this immutability property. Unrelated to Clacc, Clang uses the TreeTransform tool for several purposes. For example, Clang derives TemplateInstantiator from TreeTransform to transform C++ templates to instantiate them. When the parser reaches a template instantiation in the source code, the TemplateInstantiator builds a transformed copy of the AST subtree representing the template and inserts it into the AST. This insertion is part of the normal process of expanding the AST during parsing, and therefore does not violate the AST's immutability.
+
+The design of TreeTransform has the following benefits:
+
+* Scalability: TreeTransform is a class template that uses CRTP technology to achieve static polymorphism. Therefore, unreasonable default behavior in OpenACC to OpenMP conversion can be overridden. Using CRTP in TreeTransform means that the transformation behavior can be customized for specific transformation tasks without modifying the code of TreeTransform itself. By using CRTP, you can create a derived class that inherits from TreeTransform and override the methods that need to be customized in the derived class. This way, when a transformation is performed, the method in the derived class is called instead of the default method in TreeTransform. This mechanism makes the conversion process more flexible and customizable, able to adapt to different conversion needs.
+
+* Encapsulation of semantic analysis: TreeTransform's interface provides a convenient encapsulation of semantic actions that are usually called during parsing. This encapsulation enables Clacc to call these actions to build an OpenMP AST without any dependencies on the current OpenMP implementation in Sema.
+
+### ACCDirectiveStmt: Directives as Statements
+
+In this section, we describe how TransformACCToOMP handles OpenACC instructions that make up C or C++ statements. There are two types:
+
+* OpenACC structures, such as parallel instructions.
+* OpenACC executable commands, such as update command
+Take the following code as an example. The commented part represents the equivalent OpenMP instructions.
+
+```c++
+void foo() {
+    #pragma acc parallel  // #pragma omp target teams
+    #pragma acc loop gang // #pragma omp distribute
+    for (int i=0; i<2; ++i)
+      // loop body
+}
+```
+
+The constructed AST is as follows:
+
+```c++
+TranslationUnitDecl
+                |
+           FunctionDecl
+                |
+           CompoundStmt
+                |
+       ACCParallelDirective
+                |          `-OMPNode-> OMPTargetTeamsDirective
+         ACCLoopDirective                         |
+              /   \      `---OMPNode---> OMPDistributeDirective
+  ACCGangClause   ForStmt                         |
+                     |                         ForStmt
+                                                  |
+```
+
+Clacc's `ACCDirectiveStmt` is the base class representing OpenACC directives that form statements, such as `ACCParallelDirective` and `ACCLoopDirective` in the example above. `OMPExecutableDirective` is also a base class used to represent any corresponding OpenMP nodes, such as `OMPTargetTeamsDirective` and `OMPDistributeDirective` in the example above. Clacc's DirectiveStmt is the base class of `ACCDirectiveStmt` and `OMPExecutableDirective`.
+
+```c++
+class DirectiveStmt : public Stmt {
+protected:
+  DirectiveStmt(StmtClass SC) : Stmt(SC) {}
+public:
+  SourceRange getConstructRange(bool *FinalSemicolonIsNext = nullptr) const;
+  SourceRange getDirectiveRange() const {
+    return SourceRange(getBeginLoc(), getEndLoc());
+  }
+
+  static bool classof(const Stmt *S) {
+    return S->getStmtClass() >= firstDirectiveStmtConstant &&
+           S->getStmtClass() <= lastDirectiveStmtConstant;
+  }
+};
+} // end namespace clang
+```
+
+Each such instruction node serves as the root of a subtree that also contains any associated statements. In the above example, the associated statement of `ACCParallelDirective` is `ACCLoopDirective`, and its associated statement is ForStmt. The associated statement of `OMPTargetTeamsDirective` is `OMPDistributeDirective`, and its associated statement is another ForStmt.
+
+Inserting `ACCDirectiveStmt` and its `OMPExecutableDirective` as siblings into the Clang AST creates confusing semantics, meaning both statements are executed sequentially. So, like the example above, `TransformACCToOMP` adds the `OMPExecutableDirective` as a hidden child of `ACCDirectiveStmt`. The `OMPExecutableDirective` can be retrieved using the getOMPNode member function of `ACCDirectiveStmt`.
+
+`TransformACCToOMP` translates instructions from bottom to top. So, in the above example, `TransformACCToOMP` first copies the ForStmt and its subtree. It then converts the `ACCLoopDirective` to an `OMPDistributeDirective`, which becomes the normal parent of the translated ForStmt and the hidden OpenMP child of the `ACCLoopDirective`. Finally, it converts `ACCParallelDirective` to `OMPTargetTeamsDirective`, which becomes the normal parent of `OMPDistributeDirective` and the hidden OpenMP child of `ACCParallelDirective`.
+
+### ACCDeclAttr: Declarative Directives as Attributes
+
+In this section we describe how `TransformACCToOMP` handles OpenACC declarative directives.
+Take the following code as an example. The commented parts represent equivalent OpenMP instructions.
+
+```c++
+#pragma acc routine seq // #pragma omp declare target
+void foo(); // #pragma omp end declare target
+```
+The equivalent AST constructed by Clacc is as follows:
+
+```c++
+              	TranslationUnitDecl
+                          |
+                     FunctionDecl
+                    /            \
+  ACCRoutineDeclAttr --OMPNode--> OMPDeclareTargetDeclAttr
+          |                                  |
+         Seq                     IsOpenACCTranslation=true
+```
+
+Clacc's `ACDeclAttr` is the base class for any attribute node that represents an OpenACC declaration directive, such as ACCRoutineDeclAttr in the above example. Clacc's `OMPDeclAttr` is the base class for any corresponding OpenMP attribute node, such as `OMPDeclareTargetDeclAttr` in the above example. InheritableAttr, also present upstream, is the base class for `ACCDeclAttr` and `OMPDeclAttr` in Clacc. Decl is the base class of related declaration nodes, such as FunctionDecl in the above example.
+
+Unlike instructions that form statements, declaration instructions are not represented in the Clang AST as the root node of a subtree containing the associated code. Instead, it is represented as an attribute node attached to the related declaration. Additionally, `TransformACCToOMP` inserts `ACCDeclAttr` and its `OMPDeclAttr` into the Clang AST as siblings: both are directly attached to the same Decl. In the above example, both ACCRoutineDeclAttr and OMPDeclareTargetDeclAttr are attached to `FunctionDecl`.
+
+If `TransformACCToOMP` stores `OMPDeclAttr` as a hidden child of `ACCDeclAttr`, as it does for `OMPExecutableDirective` and `ACCDirectiveStmt`, then a significant refactoring of existing OpenMP semantic analysis and LLVM IR code generation implementations will be required in order for these analyzes to find `OMPDeclAttr` . The reason is that, unlike Clang's implementation of statements, Clang's implementation of OpenMP attributes doesn't have a few big switches or if-then-else blocks to easily extend new node types. Instead, it retrieves specific properties at many points in its implementation.
+
+However, `TransformACCToOMP` does document the relationship between `ACCDeclAttr` and its `OMPDeclAttr`. First, like `ACCDirectiveStmt`, `ACCDeclAttr` has a getOMPNode member function for retrieving `OMPDeclAttr`. Secondly, `OMPDeclAttr` has a `getIsOpenACCTranslation` member function that returns true to indicate that it does not represent the OpenMP directive present in the original source code. These properties make it easier for analysis, especially AST printing and source-to-source translation, to choose which attribute nodes to access and their relationships.
+
+In some cases, `TransformACCToOMP` determines that OpenACC declaration directives should simply be discarded when translating to OpenMP. In this case, ACCDeclAttr has no corresponding `OMPDeclAttr`, and its `directiveDiscardedForOMP` member function returns true.
+
+If an OpenACC declaration directive is syntactically attached to a declaration, then the directive's `ACCDeclAttr` and any OMPDeclAttr are appended to the declaration's Decl. Otherwise, the directive's `ACCDeclAttr` and any OMPDeclAttr are appended to the most recently declared Decl of the relevant symbol when Clang determined the `ACCDeclAttr`. In either case, the result is that `ACCDeclAttr` and any `OMPDeclAttr` are inherited by any symbol's declared Decl in the remainder of the translation unit.
+
+### TreeTransform Caveats and AST Traversals
+
+Clacc supports at least three types of AST traversal:
+
+* OpenACC only access: For example,` -ast-print` is an existing Clang command line option for translating Clang AST back to source code. So Clacc extended it so that OpenACC does not include OpenMP translations. `-ast-print` accesses `ACCParrallelDirective`, `ACCLoopDirective`, the original ForStmt subtree, and `ACCRoutineDeclAttr`, but does not access `OMPTargetTeamsDirective`, `OMPDistributeDirective`, the translated ForStmt subtree, or `OMPDeclareTargetDeclAttr`.
+
+* Delegating to OpenMP: For example, one of the main motivations for translating the OpenACC AST to the OpenMP AST was to reuse the existing LLVM IR code generation implementation of OpenMP. Therefore, for LLVM IR code generation, each `ACCDirectiveStmt` is delegated to its hidden `OMPExecutableDirective` child node, and each `ACCDeclAttr` is skipped in order to use its `OMPDeclAttr`. In the previous example, `ACCParrallelDirective` delegates LLVM IR code generation to `OMPTargetTeamsDirective` and its subtree, while the normal subtree of `ACCParrallelDirective` is not accessed. `ACCRoutineDeclAttr` is ignored, perform normal OpenMP code generation for `OMPDeclareTargetDeclAttr`.
+
+● Access to OpenACC and OpenMP: For each `ACCDirectiveStmt`, Clacc extends this feature to always generate a complete representation of the node's subtree, including as specially marked child nodes, the OpenMP subtree to which it is translated. Clacc also adds a representation of each `ACCDeclAttr`, including its OMPDeclAttr kind, which is printed as a separate property, including its IsOpenACCTranslation property.
+
+### Codegen
+
+An OpenACC AST node of type `ACCDirectiveStmt` implements LLVM IR code generation by delegating to its hidden OpenMP child nodes. The most obvious point of this implementation is the case of OpenACC in the main switch of AST node types in Clang code generation's `CodeGenFunction::EmitStmt`.
+
+Clacc makes no changes to LLVM IR code generation, so `ACCDeclAttr` nodes are ignored. The corresponding `OMPDeclAttr` node is seen directly by the code generator and processed as it would be in an OpenMP program. This means that, in Clacc's implementation, specific OpenACC attributes (represented by `ACCDeclAttr` nodes) are ignored during the LLVM IR code generation phase. Instead, their OpenMP counterparts (represented by `OMPDeclAttr` nodes) are recognized and processed directly, just like in a pure OpenMP program. This approach simplifies the implementation of Clacc because it can reuse existing OpenMP code generation logic without introducing a new code generation path for OpenACC. However, this also means that some specific features or optimizations of OpenACC may not be directly supported unless they can be expressed through existing OpenMP code generation logic.
+
+### OpenACC Directive within C++ Templates
+
+To instantiate a C++ template, Clang uses TreeTransform to transform it. Specifically, Clang derives TemplateInstantiator from TreeTransform for this purpose.
+
+In TreeTransform, for each AST node, you must implement a member function that calls the same Sema operations that the parser normally calls to build that AST node. The difference with the parser is the input: instead of textual source code, the input consists of (1) the template's corresponding AST node, which is passed as an argument to the TreeTransform member function, and (2) the template parameters and other instantiation-specific information, which is contained in the TemplateInstantiator object.
+
+In contrast, TreeTransform is not a template specialization that provides a new template definition, but is parsed into a new AST node. For OpenACC AST nodes, such as ACCParallelDirective, Clacc adds implementations of related TreeTransform member functions, such as TransformACCParallelDirective.
+
+When parsing an original template or a partial template specialization, if actual template parameters are missing to determine whether an OpenACC directive violates a restriction, Clacc's OpenACC Sema operation assumes no violation, skips the relevant diagnostics, and continues building the AST. In the case where the template is instantiated, such undefined cases are eliminated. As mentioned above, Clacc's TreeTransform member function then performs the Sema operation again, thus diagnosing any constraint violations. Violations of constraints can be determined in the template despite missing template parameters, and instead of waiting for the template to be instantiated, Clacc's Sema operation diagnoses it immediately in the template, where the diagnosis is more helpful to the user.
+
+```c++
+template <typename T>
+void f(T x) {
+  #pragma acc parallel copy(x) // implicit reduction(+:x)
+  #pragma acc loop gang worker vector reduction(+:x)
+  for (int i = 0; i < N; ++i)
+  x += N;
+}
+void g(int i)  { f(i); }
+void h(int *p) { f(p); } // error: OpenACC reduction operator '+' argument must be of arithmetic type
+```
+
+When parsing a template function f, Clacc's Sema action assumes that T is compatible with the reduction operator + on loop constructions. When instantiating g with f , they verify that the int is indeed compatible. However, when instantiating h with f , they report an error diagnosis that int * is incompatible, so they discard the explicit reduction on the loop construction.
+
+### Discard AST Nodes Computed for Templates
+
+The implementation of Clacc's TreeTransform member functions is mostly simple. It extracts the properties from the template's AST nodes and calls the Sema action to build the corresponding AST node for the template instantiation based on these properties. When such an attribute is another AST node, it usually calls the appropriate TreeTransform member function recursively and rebuilds it first.
+
+However, this recursion usually only works for AST nodes that correspond to explicit source code. AST nodes calculated by OpenACC semantic analysis must be recalculated from scratch to take into account the impact of template parameters. Specifically:
+
+* Clacc's TreeTransform member function ignores previously calculated predetermined and implicitly determined clauses for the template. Doing so allows the Sema operation of the associated OpenACC directive to recompute the template instantiated clause from scratch.
+
+* After building a new AST node of an OpenACC directive with new such clauses, it calls TransformACCToOMP to recompute its OpenMP node based on these clauses.
+
+For example, in f in the previous example, Clacc's parallel-constructed Sema action evaluates an implicit reduction clause to indicate that the loop-constructed gang reduction is effectively performed there. However, in the instantiation of f in h , Clacc's Sema action for parallel construction now does not evaluate the implicit reduction clause due to a type compatibility error found for the explicit reduction clause on the loop construction. What's important here is that Clacc's parallel-constructed TreeTransform member function ignores the implicit reduction clause in the original template, because recursing and rebuilding with TreeTransform will trigger the same type compatibility diagnostic again, unless it's invisible to the user False reduction clause.
+
+## CUDA
+
+### nvcc compile cuda
+
+This part of the content is mainly written with reference to NVIDIA official document NVCCNVIDIA CUDA Compiler Driver NVCC.
+
+The working principle of CUDA compilation is as follows: the input program is pre-processed by device compilation, compiled into a CUDA binary file (cubin) or PTX intermediate code, and placed in the fatbinary. The input program is again preprocessed for host compilation and synthesized to embed fatbinary and convert CUDA-specific C++ extensions into standard C++ structures. The C++ host compiler then compiles the synthesized host code with the embedded fatbinary into a host object. The overall compilation process is shown in the figure below:
+
+![FrameworkOverview](../../Images/cuda-compile.png)
+
+Whenever a host program starts device code, the CUDA runtime system checks the embedded fatbinary for the appropriate fatbinary image for the current GPU. GPU compilation is performed through PTX, which can be considered part of the virtual GPU architecture. As opposed to an actual graphics processor, such a virtual GPU is entirely defined by the set of functions or features it provides to an application. In particular, the virtual GPU architecture provides a common instruction set, and binary instruction encoding is not an issue since PTX programs are always represented in text format.
+
+> GPU Virtual Intermediate Architecture: An abstraction layer for GPU programming that hides the details of different GPU hardware and provides a unified compilation target and execution model. The main advantages of the GPU virtual intermediate architecture are that it can improve the portability and scalability of GPU programs and simplify the design and optimization of GPU compilers.
+
+> An example of a GPU virtual intermediate architecture is NVIDIA's CUDA, which defines a set of virtual instruction sets and memory models for writing kernel functions that run on the GPU. CUDA's compiler driver nvcc can compile CUDA source code into a binary file of a virtual instruction set, and then further optimize and convert it according to the actual architecture of the target GPU. CUDA's virtual instruction set supports multiple virtual architectures, such as sm_30, sm_50, etc. Each virtual architecture corresponds to a series of actual architectures, such as sm_30 corresponds to the Kepler series of GPUs, and sm_50 corresponds to the Maxwell series of GPUs.
+
+Therefore, the nvcc compile command always uses two architectures: the virtual intermediate architecture, and the real GPU architecture that specifies the intended processor to execute on. In order for such nvcc commands to be valid, the real architecture must be an implementation of the virtual architecture.
+
+Always choose the lowest possible virtual architecture to maximize utilization of the actual running GPU. The highest possible realistic architecture should be chosen (assuming this always generates better code), but this is only possible with knowledge of the actual GPU on which the application is expected to run.
+
+![FrameworkOverview](../../Images/cuda-virtual-arch.png)
+
+The actual GPU compilation step binds the code to a generation of GPUs. In this generation, it comes down to a choice between GPU coverage and possible performance. For example, compiling to sm_50 allows code to run on all Maxwell series GPUs, but if Maxwell GM206 and above is the only target, compiling to sm_53 may produce better code.
+
+By specifying a virtual code architecture instead of a real GPU, nvcc defers assembly of PTX code until application runtime, when the target GPU is accurately known. For example, the following command allows the generation of an exact matching GPU binary when the application is launched on an sm_50 or higher architecture.
+
+### clang compile CUDA
+
+This part mainly talks about how to use clang to compile cuda code.
+
+Most of the differences between clang and nvcc stem from the different compilation models they use. nvcc uses separated compilation, and its working principle is roughly as follows:
+
+* Run the preprocessor on the input .cu file and split it into two source files: H: contains the source code for the host; D: contains the source code for the device.
+
+* For each GPU architecture we are compiling for, do the following:
+  * Use nvcc to compile D. The result is a ptx file targeting P_arch.
+  * Call the PTX assembler ptxas to generate a file S_arch, which contains the GPU machine code (SASS) of arch.
+
+* Call fatbin to merge all P_arch and S_arch files into a single fat binary file F.
+
+* Compile H using an external host compiler (gcc, clang, or whatever you like). F is packaged into a header file, which is forced to be included in H; nvcc generates code that calls this header file, such as starting the kernel.
+clang uses merged parsing. This is similar to split compilation, except that all host and device code is present and must be semantically correct in both compilation steps.
+
+* For each GPU architecture we are compiling for, do the following:
+  * Use clang to compile the input .cu file for the device. Although we are not generating code for the host at this time, the parsed host code must be semantically correct. The output of this step is a ptx file P_arch.
+
+  * Call ptxas to generate a SASS file S_arch. Note that unlike nvcc, clang always generates SASS code.
+
+* Call fatbin to merge all P_arch and S_arch files into a single fat binary file F.
+
+* Use clang to compile H. Even though we are not generating code for the device at this time, the __device__ code is parsed and must be semantically correct.
+
+* F is passed to this compilation, and clang includes it in a special ELF section, which can be found through tools such as cuobjdump.
+
+## References
+
+[1] https://superjomn.github.io/posts/triton-mlir-publish/
+
+[2] https://hjchen2.github.io/2023/01/04/IREE%E7%BC%96%E8%AF%91%E6%B5%81%E7%A8%8B/
+
+[3] https://zhuanlan.zhihu.com/p/628910571
+
+[4] https://www.khronos.org/assets/uploads/developers/presentations/IREE_targeting_Vulkan_Zhang_May22.pdf
+
+[5] https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/contents.html
+
+[6] https://zhuanlan.zhihu.com/p/409154399
+
+[7] https://chromium.googlesource.com/external/github.com/llvm-mirror/llvm/+/refs/heads/master/docs/CompileCudaWithLLVM.rst
+
+[8] https://jia.je/software/2023/10/17/clang-cuda-support/
+
+[9] https://llvm.org/devmtg/2009-10/OpenCLWithLLVM.pdf
+
+[10] https://clang.llvm.org/docs/OpenCLSupport.html 
+
+[11] https://github.com/llvm-doe-org/llvm-project/blob/clacc/main/clang/README-OpenACC-design.md 
+
+[12] https://www.cnblogs.com/LoyenWang/p/15085664.html
+
+[13] https://zhuanlan.zhihu.com/p/447456123
+
+[14] https://www.researchgate.net/publication/263894838_Design_of_OpenCL_Framework_for_Embedded_Multi-core_Processors
