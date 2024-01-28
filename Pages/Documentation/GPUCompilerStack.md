@@ -1688,3 +1688,75 @@ The main steps of the above code:
 * `createCombineInitializersPass()`: used to combine initialization operations into one operation, such as hal.variable.load or hal.variable.store, etc.
 
 * `createSerializeExecutablesPass()`: used to serialize executable files into bytecode, such as hal.executable.binary or hal.executable.format, etc., and output them to the specified path for deployment or distribution.
+
+## OPENCL
+
+OpenCL (Open Computing Language, Open Design Language) is a framework designed for programming heterogeneous platforms (CPU/GPU/DSP/FPGA, etc.). OpenCL consists of a language for writing kernels (based on C99) and a set of APIs for defining and controlling the platform. It is mainly used for parallel computing.
+
+OpenCL mainly consists of two parts:
+
+1. Used to write kernels language running on OpenCL device (based on C99, C++17)
+
+2. OpenCL API, the actual implementation of Runtime is left to each manufacturer.
+
+![FrameworkOverview](../../Images/opencl-arch.png)
+
+The architecture of OpenCL can be developed from three perspectives: platform model, memory model, and execution model.
+
+### Platform Model
+
+![FrameworkOverview](../../Images/opencl-platform-model.png)
+
+
+In OpenCL, we first need a host processor (Host), usually a CPU. Other hardware processors (multi-core CPU/GPU/DSP, etc.) are abstracted into OpenCL devices (Device), and the platform model consists of a Host connected to one or more OpenCL Devices. Each device contains multiple computing units (Compute Unit CU), and each computing unit contains multiple processing units (Processing Element PE). The final calculation is completed by the PE.
+During execution, the main process is to run the host code on the Host side and submit the kernel code to the Device side according to the command. 
+
+The Device side calculates and runs the kernel code, and finally synchronizes on the Host side.For example, the computing device may be a GPU. The computing units correspond to the streaming multiprocessors (SMs) inside the GPU, and the processing elements correspond to the single streaming processors (SPs) inside each SM. Processors typically group processing elements into computational units, by sharing instruction scheduling and memory resources, and by adding local inter-processor communication.
+
+### Execution Model
+
+![FrameworkOverview](../../Images/opencl-execution-model.png)
+
+* Context: Each device corresponds to a Context, and the Host interacts and manages the Device through Context;
+
+* Command Queue: The channel through which the Host controls the computing device and pushes a series of commands for the Device to execute, including data transmission, execution of computing tasks, etc. A command queue can only manage one device and can be executed in order or out of order;
+
+* Kernel Objects: The core part of OpenCL calculation, expressed as a piece of C-style code. When the device is required to perform computing tasks, the data will be pushed to the Device side, and then multiple computing units on the Device side will execute the kernel program concurrently to complete the scheduled calculation process;
+
+* Program Objects: A collection of kernel objects. In OpenCL, cl_program is used to represent a program object. It can be created using source code text or binary data.
+
+A complete OpenCL program execution flow is as follows:
+
+1. Query available OpenCL platforms and devices
+
+2. Create a context for one or more OpenCL devices in the platform
+
+3. Create and build a program for the OpenCL device in the context
+
+4. Select the kernel to execute from the program
+
+5. Create memory objects for kernel operations
+
+6. Create a command queue to execute commands on the OpenCL device
+
+7. If necessary, queue data transfer commands into a memory object
+
+8. Enqueue the kernel into a command queue for execution
+
+9. If necessary, transfer data to the host
+
+### Memory Model
+
+![FrameworkOverview](../../Images/opencl-memory-model.png)
+
+* Host Memory: The storage available to the host, usually corresponding to the memory on the host (Host) side, and can transmit data to the device side through direct transmission/shared memory;
+
+* Global Memory: usually refers to video memory, allowing all work items (Work Item) in the work group (Work Group) on any device in the context to read and write;
+
+* Constant Memory: special on-chip memory, read-only, data remains unchanged during kernel execution;
+
+* Local Memory: visible to all work items within the entire work group, used for data sharing between work items within the same work group;
+
+* Private Memory: A private area of a work item that is not visible to other work items. It is usually mapped to a register in hardware implementation.
+
+In OpenCL, the data content in global memory is represented by storage objects (Memory Object). The two most commonly used storage objects in OpenCL are: `Buffer Objects` and `Image Objects`.
