@@ -193,35 +193,35 @@ In `ParallelLoopToGpuPass`, the `scf.parallel` to `gpu.launch` operation is main
 
 5. Use a loop to iterate through the work list until the work list is empty. In each loop, it does the following:
 
-   a. It pops an operation from the work list and handles it differently depending on the type of operation.
+    a. It pops an operation from the work list and handles it differently depending on the type of operation.
    
-   b. If the operation is a `ParallelOp` type operation, which means the operation is a nested parallel loop, then do the following:
+    b. If the operation is a `ParallelOp` type operation, which means the operation is a nested parallel loop, then do the following:
 
-     ⅰ. Before entering a nested scope, check whether there have been any side effects. If so, return a failure value because nested parallel loops in code with side effects are not supported.
+      ⅰ. Before entering a nested scope, check whether there have been any side effects. If so, return a failure value because nested parallel loops in code with side effects are not supported.
 
-     ⅱ. Call the `processParallelLoop` function to process this nested parallel loop and update the mapping relationship, work list, grid and thread block size. If this function returns a failure value, then a failure value is returned.
+      ⅱ. Call the `processParallelLoop` function to process this nested parallel loop and update the mapping relationship, work list, grid and thread block size. If this function returns a failure value, then a failure value is returned.
 
-     ⅲ. If the operation is a `gpu::LaunchOp` type operation, it means that the operation is a previously created launch operation. It serves as a sentinel value to indicate that a nested level operation has been completed, then do the following:
+      ⅲ. If the operation is a `gpu::LaunchOp` type operation, it means that the operation is a previously created launch operation. It serves as a sentinel value to indicate that a nested level operation has been completed, then do the following:
 
-     ⅳ. Get the parent operation of the current insertion point, and set the insertion point behind the parent operation, so that you can continue to process the operation of the previous level.
+      ⅳ. Get the parent operation of the current insertion point, and set the insertion point behind the parent operation, so that you can continue to process the operation of the previous level.
 
-     ⅴ. Set the variable leaving the nested scope to true, indicating that it is no longer in the innermost scope.
+      ⅴ. Set the variable leaving the nested scope to true, indicating that it is no longer in the innermost scope.
 
-     vi. Set the variable that sees the side effect to false, indicating that the status of the side effect is reset.
+      vi. Set the variable that sees the side effect to false, indicating that the status of the side effect is reset.
 
-   c. Otherwise, it means that the operation is a common operation, then do the following:
+    c. Otherwise, it means that the operation is a common operation, then do the following:
 
-     ⅰ. Use the rewriter and mapping relationship to clone this operation, and map the result of the operation to the cloned result so that consistency can be maintained.
+      ⅰ. Use the rewriter and mapping relationship to clone this operation, and map the result of the operation to the cloned result so that consistency can be maintained.
 
-     ⅱ. Check whether the cloning operation has side effects or whether there are areas. If so, set the variable that sees the side effect to true, indicating that we need to pay attention to the impact of the side effect.
+      ⅱ. Check whether the cloning operation has side effects or whether there are areas. If so, set the variable that sees the side effect to true, indicating that we need to pay attention to the impact of the side effect.
 
-     iii. If the innermost scope has been left and a side effect is seen, a failure value is returned, since side effects in non-innermost scopes are not supported.
+      iii. If the innermost scope has been left and a side effect is seen, a failure value is returned, since side effects in non-innermost scopes are not supported.
 
 6. After the loop ends, it means that the startup operation has been successfully created, then do the following:
 
-   a. Traverse the mapping of grid and thread block sizes, obtain the number of the operand of the startup operation according to the mapped key (value of gpu::Processor type), and then set the operand of the startup operation to the mapped value (Value type value) so that the grid and thread block size of the initiated operation can be updated.
+    a. Traverse the mapping of grid and thread block sizes, obtain the number of the operand of the startup operation according to the mapped key (value of `gpu::Processor type`), and then set the operand of the startup operation to the mapped value (Value type value) so that the grid and thread block size of the initiated operation can be updated.
 
-   b. Use the rewriter to remove the original parallel loop operation since it has been converted to a startup operation.
+    b. Use the rewriter to remove the original parallel loop operation since it has been converted to a startup operation.
 
 ### `-convert-gpu-to-nvvm`
 
@@ -390,11 +390,11 @@ The main idea of the above matchAndRewrite implementation is:
 `-gpu-to-llvm` pass is a backend for converting GPU modules to LLVM IR. This backend can convert GPU-specific operations and data types in the GPU module to corresponding operations and data types in LLVM IR, thereby enabling the compilation and optimization of GPU code on LLVM.
 
 This backend has the following main steps:
-● It will traverse all functions and variables in the GPU module and map them to the corresponding functions and variables in LLVM IR. For example, it will map the gpu.alloc function to the llvm.memcpy function, the gpu.launch_func function to the llvm.launch function, etc.
+* It will traverse all functions and variables in the GPU module and map them to the corresponding functions and variables in LLVM IR. For example, it will map the gpu.alloc function to the llvm.memcpy function, the gpu.launch_func function to the llvm.launch function, etc.
 
-● Then, it converts operations that use special formats or conventions in the GPU module. For example, it will convert `gpu.all_reduce min uniform { } : (f64) -> f64` to `llvm.sdiv_f32 min %0, %1 : f32 -> f32 etc`.
+* Then, it converts operations that use special formats or conventions in the GPU module. For example, it will convert `gpu.all_reduce min uniform { } : (f64) -> f64` to `llvm.sdiv_f32 min %0, %1 : f32 -> f32 etc`.
 
-● Finally, it will convert the data types using special formats or conventions in the GPU module. For example, it will convert `gpu.spmat_get_size (gpu::SpMatGetSizeOp)` to `llvm.i32` getelementptr inbounds `i32, i32, i32, i32 0, 0, 0, 0 : i32 -> i32`.
+* Finally, it will convert the data types using special formats or conventions in the GPU module. For example, it will convert `gpu.spmat_get_size (gpu::SpMatGetSizeOp)` to `llvm.i32` getelementptr inbounds `i32, i32, i32, i32 0, 0, 0, 0 : i32 -> i32`.
 
 This Pass is implemented through `GpuToLLVMConversionPass` (the code is located at: `lib/Conversion/GPUCommon/GPUToLLVMConversion.cpp`).
 
@@ -442,17 +442,17 @@ void GpuToLLVMConversionPass::runOnOperation() {
 The general idea of ​​implementing this code:
 1. First is the initialization of variables. Initialize the following variables for subsequent conversion operations:
 
-   a. Create an instance of LowerToLLVMOptions options(&getContext()), which specifies some conversion options
+    a. Create an instance of LowerToLLVMOptions options(`&getContext()`), which specifies some conversion options
 
-   b. Create LLVMTypeConverter converter(&getContext(), options) for type conversion between MLIR and LLVM IR
+    b. Create LLVMTypeConverter converter(`&getContext()`, options) for type conversion between MLIR and LLVM IR
 
-   c. Create a RewritePatternSet patterns(&getContext()); collection of rewrite patterns, which will store the patterns for converting gpu dialect to llvm dialect operations.
+    c. Create a `RewritePatternSet` patterns(`&getContext()`); collection of rewrite patterns, which will store the patterns for converting gpu dialect to llvm dialect operations.
 
-   d. Create LLVMConversionTarget target(getContext()) to specify the target platform for conversion
+    d. Create `LLVMConversionTarget` target(`getContext()`) to specify the target platform for conversion
   
-2. Use target.addDynamicallyLegalOp to determine whether the subsequent conversion operation is legal. The judgment method used is that only when the GPU module has the target attribute, it will be considered legal.
+2. Use `target.addDynamicallyLegalOp` to determine whether the subsequent conversion operation is legal. The judgment method used is that only when the GPU module has the target attribute, it will be considered legal.
 
-3. Call populateGpuToLLVMConversionPatterns to populate RewritePatternSet with conversion patterns for different types of GPU operations. The added conversion patterns are as shown in the following code:
+3. Call `populateGpuToLLVMConversionPatterns` to populate `RewritePatternSet` with conversion patterns for different types of GPU operations. The added conversion patterns are as shown in the following code:
 
 
 ```c++
@@ -555,7 +555,7 @@ The general idea of this code:
 
 2. Create a callback function lazyTableBuilder for symbol table construction
 
-3. Build a callback function based on the toolkit path, link file, command line option, target format and symbol table to create target options TargetOptions
+3. Build a callback function based on the toolkit path, link file, command line option, target format and symbol table to create target options `TargetOptions`
 
 4. Call the transformGpuModulesToBinaries function to convert the GPU modules into binary representation. This function will traverse all areas of the op, call the moduleSerializer function for each GPUModule in each Block of each Region, and serialize the GPUModule.
 
@@ -577,9 +577,9 @@ The general idea of implementing the moduleSerializer function is as follows:
 
 1. Create an OpBuilder object for building MLIR operations and a SmallVector object for storing serialized objects.
 
-2. Traverse all target attributes of GPUModuleOp. Each target attribute represents a specific GPU target.
+2. Traverse all target attributes of `GPUModuleOp`. Each target attribute represents a specific GPU target.
 
-3. Use the serializeToObject method of the target object to serialize the GPU module into a binary object, and store the serialized result in serializedModule. Search the MLIR source code. Currently, there are three objects supported by MLIR that can be serialized, namely: NVVM, ROCDL, and SPIRV.
+3. Use the `serializeToObject` method of the target object to serialize the GPU module into a binary object, and store the serialized result in serializedModule. Search the MLIR source code. Currently, there are three objects supported by MLIR that can be serialized, namely: NVVM, ROCDL, and SPIRV.
 
 ```c++
 LogicalResult moduleSerializer(GPUModuleOp op,
@@ -646,7 +646,7 @@ In the source code, `NVPTXSerializer` and `SerializeGPUModuleBase` do not overri
 
 2. Call loadBitCodeFiles and linkFiles to load and link binary files to llvmmodule
 
-3. Call `moduleToObject` to write the binary data of llvmmodule into a buffer, and call llvm::WriteBitCodeToFile to write the data into the file and return the buffer.
+3. Call `moduleToObject` to write the binary data of llvmmodule into a buffer, and call `llvm::WriteBitCodeToFile` to write the data into the file and return the buffer.
 
 At this point, the conversion between gpu module and binary is completed.
 
@@ -660,19 +660,19 @@ The overall architecture of Triton is shown in the figure below:
 
 As shown in above picture:
 
-● Frontend: The frontend of Triton is a Python library that provides a decorator @triton.jit for converting Python functions into Triton functions. The body of a Triton function is written in the Triton DSL, a Python-like language, which supports some basic control flow and arithmetic operations, as well as some features specific to GPU programming, such as indexing, memory management, synchronization, and atomic operations. Triton's front-end is also responsible for parsing the source code of Triton functions into an abstract syntax tree (AST) and reducing it to a Triton Dialect, an intermediate representation (IR) that is closer to the upper-level language expression.
+* Frontend: The frontend of Triton is a Python library that provides a decorator `@triton.jit` for converting Python functions into Triton functions. The body of a Triton function is written in the Triton DSL, a Python-like language, which supports some basic control flow and arithmetic operations, as well as some features specific to GPU programming, such as indexing, memory management, synchronization, and atomic operations. Triton's front-end is also responsible for parsing the source code of Triton functions into an abstract syntax tree (AST) and reducing it to a Triton Dialect, an intermediate representation (IR) that is closer to the upper-level language expression.
 
-● Optimizer: Triton's Optimizer is a compiler based on MLIR, which is responsible for converting Triton Dialect into IRs for different target backends. Currently, Triton supports two backends: CUDA and ROCm. Triton's mid-end is also responsible for some optimizations, such as loop unrolling, memory allocation, data layout transformation, instruction selection and scheduling, etc.
+* Optimizer: Triton's Optimizer is a compiler based on MLIR, which is responsible for converting Triton Dialect into IRs for different target backends. Currently, Triton supports two backends: CUDA and ROCm. Triton's mid-end is also responsible for some optimizations, such as loop unrolling, memory allocation, data layout transformation, instruction selection and scheduling, etc.
 
-● Backend: Triton’s backend is a compiler based on LLVM, which is responsible for generating the IR of the target backend into executable GPU code. Triton's backend is also responsible for some backend-specific optimizations, such as register allocation, instruction scheduling, memory merging, etc.
+* Backend: Triton’s backend is a compiler based on LLVM, which is responsible for generating the IR of the target backend into executable GPU code. Triton's backend is also responsible for some backend-specific optimizations, such as register allocation, instruction scheduling, memory merging, etc.
 
 The core that runs through these three parts is Triton's IR, which is also divided into two levels:
 
 1. Triton Dialect represents calculation logic, hardware-independent expression
 
-2. TritonGPU Dialect GPU related calculation representation
+2. `TritonGPU` Dialect GPU related calculation representation
 
-This part focuses on the Optimizer and Backend parts, and investigates how Triton gradually converts Triton IR to TritonGPU IR through various passes, and gradually converts TritonGPU IR to LLVM IR.
+This part focuses on the Optimizer and Backend parts, and investigates how Triton gradually converts Triton IR to `TritonGPU` IR through various passes, and gradually converts `TritonGPU` IR to LLVM IR.
 
 ### TritonGPUTypeConverter
 
@@ -767,13 +767,13 @@ This class is used to convert the type of Triton Dialect to the TritonGPU IR typ
 
 The parameters of the constructor are:
 
-● context: a pointer to the context of MLIR, used to obtain and create some MLIR types and attributes.
+* context: a pointer to the context of MLIR, used to obtain and create some MLIR types and attributes.
 
-● numWarps: An integer representing the number of warps in each GPU thread block. A warp is a group of threads executing the same instructions simultaneously.
+* numWarps: An integer representing the number of warps in each GPU thread block. A warp is a group of threads executing the same instructions simultaneously.
 
-● threadsPerWarp: An integer indicating the number of threads in each warp, usually 32.
+* threadsPerWarp: An integer indicating the number of threads in each warp, usually 32.
 
-● numCTAs: An integer representing the number of thread blocks in each GPU grid, a thread block is a group of threads that can share memory and synchronization.
+* numCTAs: An integer representing the number of thread blocks in each GPU grid, a thread block is a group of threads that can share memory and synchronization.
 
 The detailed explanation of this constructor is as follows:
 
@@ -781,11 +781,11 @@ The detailed explanation of this constructor is as follows:
 
 2. Call the `addConversion` member function to add a conversion function. The function of this rule is to return any type as it is, that is, without any conversion. This is to retain some types that are already Triton GPU IR, or types that do not require conversion, such as integers, floating point numbers, etc.
 
-3. Call the `addConversion` member function and add another conversion function. The parameter of this function is an object of type RankedTensorType, which represents the tensor type to be converted. Its return value is also an object of type RankedTensorType, which represents the converted tensor type. . The function of this rule is to add an encoding attribute to the tensor type. This attribute is an object of type BlockedEncodingAttr, which represents the data layout of the tensor, that is, how to map the elements of the tensor to the memory space of the GPU.
+3. Call the `addConversion` member function and add another conversion function. The parameter of this function is an object of type `RankedTensorType`, which represents the tensor type to be converted. Its return value is also an object of type `RankedTensorType`, which represents the converted tensor type. . The function of this rule is to add an encoding attribute to the tensor type. This attribute is an object of type `BlockedEncodingAttr`, which represents the data layout of the tensor, that is, how to map the elements of the tensor to the memory space of the GPU.
 
 4. Call the `addConversion` member function and add a third conversion function. The parameter is an object of type `triton::PointerType`, which represents the pointer type to be converted. Its return value is also an object of type `triton::PointerType`, which represents the converted pointer type. Pointer type. The purpose of this function is to add an encoding attribute to the tensor type pointed to by the pointer type, that is, apply the previous rule to the dereferenced type of the pointer type.
 
-5. Call the `addArgumentMaterialization` member function to add a parameter reconstruction function. The parameter is an `OpBuilder` type object, representing the builder used to create the operation, a RankedTensorType type object, representing the type of parameter to be reconstructed, and a ValueRange Type object, representing the value of the reconstructed parameter, and an object of Location type, representing the location of the reconstructed parameter. Its return value is an object of type `std::optional<Value>`, representing the reconstructed parameter. value. The function of this function is to create a new parameter value during the conversion process when a new parameter type is different from an old parameter type, and map the old parameter value to the new parameter value for subsequent Convert.
+5. Call the `addArgumentMaterialization` member function to add a parameter reconstruction function. The parameter is an `OpBuilder` type object, representing the builder used to create the operation, a `RankedTensorType` type object, representing the type of parameter to be reconstructed, and a ValueRange Type object, representing the value of the reconstructed parameter, and an object of Location type, representing the location of the reconstructed parameter. Its return value is an object of type `std::optional<Value>`, representing the reconstructed parameter. value. The function of this function is to create a new parameter value during the conversion process when a new parameter type is different from an old parameter type, and map the old parameter value to the new parameter value for subsequent Convert.
 
 6. Call the `addSourceMaterialization` member function. The function of this function is to create a new source value when a new source type is different from an old source type during the conversion process, and combine the old source value with the new source type. Values are mapped for subsequent conversion.
 
@@ -991,11 +991,11 @@ TritonGPUToLLVMTypeConverter::TritonGPUToLLVMTypeConverter(
 
 In the constructor of `TritonGPUToLLVMTypeConverter`, the corresponding type conversion function will be added to `mlir::addConversion` to handle different Triton GPU types. The specific type conversion functions are as follows:
 
-● `convertTritonPointerType`: Convert Triton pointer type to LLVM pointer type or LLVM structure type. The specific conversion rules depend on whether the pointed type is a tensor type.
+* `convertTritonPointerType`: Convert Triton pointer type to LLVM pointer type or LLVM structure type. The specific conversion rules depend on whether the pointed type is a tensor type.
 
-● `convertTritonTensorType`: Convert Triton tensor type to LLVM structure type. The specific conversion rules depend on the encoding properties of the tensor type.
+* `convertTritonTensorType`: Convert Triton tensor type to LLVM structure type. The specific conversion rules depend on the encoding properties of the tensor type.
 
-● `IntegerType::get`: Convert Triton's floating point type to LLVM's integer type. The specific conversion rule is to select the corresponding integer type based on the bit width of the floating point type. For example, Triton's float8 type is converted to LLVM's i8 type, and Triton's bfloat16 type is converted to LLVM's i16 type.
+* `IntegerType::get`: Convert Triton's floating point type to LLVM's integer type. The specific conversion rule is to select the corresponding integer type based on the bit width of the floating point type. For example, Triton's float8 type is converted to LLVM's i8 type, and Triton's bfloat16 type is converted to LLVM's i16 type.
 
 ### TritonLLVMConversionTarget
 
@@ -1086,7 +1086,7 @@ private:
   void decomposeMixedModeDotOp(ModuleOp mod) const {}
 };
 ```
-The main logic of converting Triton GPU Dialect to LLVM Dialect is in the runOptions() method. The main steps are as follows:
+The main logic of converting Triton GPU Dialect to LLVM Dialect is in the `runOptions()` method. The main steps are as follows:
 
 1. Create a `LowerToLLVMOptions` object (option) for setting LLVM conversion options.
 
@@ -1095,26 +1095,47 @@ The main logic of converting Triton GPU Dialect to LLVM Dialect is in the runOpt
 3. Create a `TritonLLVMConversionTarget` object (convTarget) to specify the target for converting Triton GPU dialect to LLVM dialect. This object will add some legal and illegal dialects to indicate which dialects need to be converted and which dialects do not need to be converted. According to the value of target, you can select NVVM dialect or ROCDL dialect as the legal target dialect for generating code for NVIDIA GPU or AMD GPU.
 
 4. Get some attributes in Triton GPU dialect, such as: numWarps, numCTAs and threadsPerWar.
+
 5. Perform some preprocessing on module operations, including:
 
-    ● decomposeFp8e4b15Convert: Convert the fp8e4b15 type in the Triton GPU dialect to the fp16 type.
+  * `decomposeFp8e4b15Convert`: Convert the fp8e4b15 type in the Triton GPU dialect to the fp16 type.
 
-    ● decomposeSplatToSharedLayout: Convert the splat operation in the Triton GPU dialect to a shared_layout    
+  * `decomposeSplatToSharedLayout`: Convert the splat operation in the Triton GPU dialect to a shared_layout    
     operation, which is used to copy data from global memory to shared memory.
 
-    ● decomposeMmaToDotOperand: Converts mma operation in Triton GPU dialect to dot_operand operation, which is used to describe the layout and type of operands of matrix multiplication.
+  * `decomposeMmaToDotOperand`: Converts mma operation in Triton GPU dialect to dot_operand operation, which is used to describe the layout and type of operands of matrix multiplication.
 
-    ● decomposeBlockedToDotOperand: Converts the blocked operation in the Triton GPU dialect to the dot_operand operation, which is used to describe the layout and type of the operands of matrix multiplication.
+  * `decomposeBlockedToDotOperand`: Converts the blocked operation in the Triton GPU dialect to the dot_operand operation, which is used to describe the layout and type of the operands of matrix multiplication.
 
-    ● decomposeInsertSliceAsyncOp: Convert the insert_slice_async operation in the Triton GPU dialect to the insert_slice_tma operation, which is used to copy data from shared memory to global memory.
+  * `decomposeInsertSliceAsyncOp`: Convert the insert_slice_async operation in the Triton GPU dialect to the insert_slice_tma operation, which is used to copy data from shared memory to global memory.
 
-    ● decomposeMixedModeDotOp: Convert the mixed_mode_dot operation in the Triton GPU dialect to a dot operation, which is used to describe the type of the result of matrix multiplication.
+  * `decomposeMixedModeDotOp`: Convert the mixed_mode_dot operation in the Triton GPU dialect to a dot operation, which is used to describe the type of the result of matrix multiplication.
 
-16. Define four auxiliary functions, named `populatePatterns1`, `populatePatterns2`, `populatePatterns3` and `populatePatterns4`. The purpose of these functions is to add some specific rewrite patterns to the patterns object in order to convert Triton GPU operations into LLVM operations. The parameters of these functions include type converter (typeConverter), rewrite pattern collection (patterns), number of thread warps (numWarps), axis information analysis (axisInfoAnalysis), memory allocation (allocation), index cache information (indexCacheInfo), TMA element data (tmaMetadata), tensor pointer mapping (tensorPtrMap) and computing capability (computeCapability). Some of these parameters are optional, depending on the requirements of the different rewrite modes. These functions also have an integer parameter (benefit), which is used to specify the priority of the rewrite mode. The higher the value, the higher the priority.
+6. Allocate shared memory and set up memory barriers, using the `ModuleAllocation` and `ModuleMembarAnalysis` classes. These two classes analyze the operations in the Triton GPU dialect, calculate the size and offset of the shared memory, and where memory barriers need to be inserted.
 
-17. Call these four auxiliary functions and pass in the function pointers of different rewrite modes, such as `populateTritonGPUToLLVMPatterns`, `populateConvertLayoutOpToLLVMPatterns`, etc. The purpose of these functions is to create corresponding rewrite patterns based on different types of Triton GPU operations and add them to the patterns object. These rewrite modes cover various tensor calculation operations, such as dot product, elementwise, load/store (load/store), reduce, scan, view, barrier, tensor pointer, cluster and register reallocation , etc.
+7. Before conversion, obtain the tensorPtrMap used to store the source operands of the insert_slice_tma operation and the store_async operation in the Triton GPU dialect of the `make_tensor_ptr` operation. These operations are used to create a Triton tensor pointer, which contains information such as the tensor's shape, stride, offset, and base address.
 
-18. In addition to Triton GPU operations, some other rewrite modes need to be added for converting arithmetic (arith) and mathematical (math) operations into LLVM operations. These operations are used to implement scalar expressions, such as addition, subtraction, multiplication and division, trigonometric functions, exponential functions, etc. These rewrite patterns are provided by MLIR's arithmetic and mathematics libraries and can be added to the patterns object by directly calling their `populateArithToLLVMConversionPatterns` and `populateMathToLLVMConversionPatterns` functions.
+8. Convert the function operation (`func_op`) in the Triton GPU dialect to the function operation (`llvm.func`) in the LLVM dialect, using the `TritonLLVMFunctionConversionTarget` and `FuncOpConversion` classes. These two classes will handle the parameters, return values, attributes, and control flow of function operations in the Triton GPU dialect.
+
+9. Before converting call and ret operations, initialize the shared memory and use the `initSharedMemory` function to achieve this. This function allocates a shared memory base address for each function operation and passes it as a parameter to the call operation.
+
+10. Convert call and ret operations
+
+11. Create an instance of `ModuleAxisInfoAnalysis`, which analyzes the axis information of each function in the module. Axis information includes thread ID, block ID, cluster CTA ID, and linearized cluster CTA ID for each dimension. This information is used to map Triton GPU operations to the GPU's physical hardware.
+
+12. Check whether the module supports warp specialization (a technique that uses special features of NVIDIA GPUs to optimize calculations).
+
+13. Define an `OpBuilder::InsertPoint` variable to record the location of the index insertion operation. Index operations are operations used to load or store data from memory, and they require knowledge of thread ID, block ID, etc.
+
+14. Define a `ConvertTritonGPUOpToLLVMPatternBase::IndexCacheInfo` structure to store information related to the index cache. Index caching is an optimization technique that improves performance by avoiding repeated calculations of the same index values. Index cache information includes basic index cache (baseIndexCache), index cache (indexCache) and index insertion point (indexInsertPoint).
+
+15. Create a RewritePatternSet object to store a series of rewrite patterns.
+
+16. Define four auxiliary functions, named `populatePatterns1`, `populatePatterns2`, `populatePatterns3` and `populatePatterns4`. The purpose of these functions is to add some specific rewrite patterns to the patterns object in order to convert Triton GPU operations into LLVM operations. The parameters of these functions include `typeConverter`, `patterns`, `number of thread warps`, `axisInfoAnalysis`, memory allocation, `indexCacheInfo`, `tmaMetadata`, `tensorPtrMap` and `computeCapability`. Some of these parameters are optional, depending on the requirements of the different rewrite modes. These functions also have an integer parameter (benefit), which is used to specify the priority of the rewrite mode. The higher the value, the higher the priority.
+
+17. Call these four auxiliary functions and pass in the function pointers of different rewrite modes, such as `populateTritonGPUToLLVMPatterns`, `populateConvertLayoutOpToLLVMPatterns`, etc. The purpose of these functions is to create corresponding rewrite patterns based on different types of Triton GPU operations and add them to the patterns object. These rewrite modes cover various tensor calculation operations, such as dot product, elementwise, load/store, reduce, scan, view, barrier, tensor pointer, cluster and register reallocation , etc.
+
+18. In addition to Triton GPU operations, some other rewrite modes need to be added for converting arithmetic and mathematical operations into LLVM operations. These operations are used to implement scalar expressions, such as addition, subtraction, multiplication and division, trigonometric functions, exponential functions, etc. These rewrite patterns are provided by MLIR's arithmetic and mathematics libraries and can be added to the patterns object by directly calling their `populateArithToLLVMConversionPatterns` and `populateMathToLLVMConversionPatterns` functions.
 
 19. Depending on the type of target platform, select different native lowering rewrite modes for converting GPU operations to a specific instruction set. The target platform can be NVVM or ROCDL, corresponding to NVIDIA's CUDA and AMD's HIP respectively. These rewrite patterns are provided by MLIR's GPU library and can be added to the patterns object by directly calling their `populateGpuToNVVMConversionPatterns` and `populateGpuToROCDLConversionPatterns` functions.
 
@@ -1130,13 +1151,13 @@ IREE is an end-to-end MLIR-based compiler and runtime that converts machine lear
 
 The main Dialects and their functions in IREE are as follows:
 
-● IREE::Input Dialect is an MLIR Dialect used to describe the input module of IREE. It can import models from a variety of machine learning frameworks (such as TensorFlow, PyTorch, JAX, etc.)
+* `IREE::Input Dialect` is an MLIR Dialect used to describe the input module of IREE. It can import models from a variety of machine learning frameworks (such as TensorFlow, PyTorch, JAX, etc.)
 
-● IREE::Flow Dialect is an MLIR Dialect used to describe data flow and control flow, including concepts such as Executable (executable file), Dispatch (scheduling), Buffer (buffer), etc.
+* `IREE::Flow Dialect` is an MLIR Dialect used to describe data flow and control flow, including concepts such as Executable (executable file), Dispatch (scheduling), Buffer (buffer), etc.
 
-● IREE::HAL Dialect is an MLIR Dialect used to describe the hardware abstraction layer (HAL). It describes the hardware details of operators, buffers, executors, etc. The purpose of HALdialect is to serve as a unified interface implemented by IREE backend. The backend can define HALdialect according to different hardware semantics. Concepts such as hal.executable, hal.dispatch, and hal.buffer are defined. They are closely tied to the semantics and mechanics of specific hardware (such as Vulkan).
+* `IREE::HAL` Dialect is an MLIR Dialect used to describe the hardware abstraction layer (HAL). It describes the hardware details of operators, buffers, executors, etc. The purpose of HALdialect is to serve as a unified interface implemented by IREE backend. The backend can define HALdialect according to different hardware semantics. Concepts such as `hal.executable`, `hal.dispatch`, and `hal.buffer` are defined. They are closely tied to the semantics and mechanics of specific hardware (such as Vulkan).
 
-● IREE::Util Dialect is an MLIR Dialect used to describe common tools and data structures.
+* `IREE::Util` Dialect is an MLIR Dialect used to describe common tools and data structures.
 
 ### InputConversionPassPipeline
 
@@ -1222,7 +1243,7 @@ Through passManager, add multiple nested passes to convert functions (`func::Fun
 
 ### CommonInputConversionPassPipeline
 
-The main function of this pipeline is to lower the IREE::Input dialect into IREE::Util, IREE::Flow and IREE::HAL dialect (the code is located at: `compiler/src/iree/compiler/InputConversion/Common`)
+The main function of this pipeline is to lower the `IREE::Input` dialect into `IREE::Util`, `IREE::Flow` and `IREE::HAL` dialect (the code is located at: `compiler/src/iree/compiler/InputConversion/Common`)
 
 ```c++
 void buildCommonInputConversionPassPipeline(OpPassManager &passManager) {
@@ -1282,10 +1303,10 @@ The main process of implementing class IREEImportPublicPass is as follows:
   * GenericTypeConvert: Convert generic types in `IREE::Inputdialect` (such as `iree::input::BufferType`) to types in other dialects (such as iree::hal::BufferType).
 
   * BuiltinFuncOpPattern: Convert functions (`func::FuncOp`) in `IREE::Inputdialect` to imported functions (iree::ImportOp) in `IREE::Utildialect` and move them to a new module for use with other modules Make a link.
-  * GlobalOpPattern: Convert the global variable (`iree::input::GlobalOp`) in `IREE::Inputdialect` to the global variable (`iree::Util::GlobalOp`) in IREE::Utildialect.
+  * GlobalOpPattern: Convert the global variable (`iree::input::GlobalOp`) in `IREE::Inputdialect` to the global variable (`iree::Util::GlobalOp`) in `IREE::Utildialect`.
 
-  * TensorExportPattern, TensorImportPattern: Convert tensor export (`iree::input::TensorExportOp`) and import (`iree::input::TensorImportOp`) operations in IREE::Inputdialect to tensor export (iree::Flow Dialect) import (`iree::flow::TensorImportOp`) operations.
-  * ExecutableSourcePattern, ExecutableExportPattern: Convert the executable source (`iree::input::ExecutableSourceOp`) and export (`iree::input::ExecutableExportOp`) operations in IREE::Inputdialect to the executable source (`iree: :hal::ExecutableSourceOp`) and export (`iree::hal::ExecutableExportOp`) operations.
+  * `TensorExportPattern`, `TensorImportPattern`: Convert tensor export (`iree::input::TensorExportOp`) and import (`iree::input::TensorImportOp`) operations in `IREE::Inputdialect` to tensor export (`iree::Flow Dialect`) import (`iree::flow::TensorImportOp`) operations.
+  * `ExecutableSourcePattern`, `ExecutableExportPattern`: Convert the executable source (`iree::input::ExecutableSourceOp`) and export (`iree::input::ExecutableExportOp`) operations in IREE::Inputdialect to the executable source (`iree: :hal::ExecutableSourceOp`) and export (`iree::hal::ExecutableExportOp`) operations.
 
   * `OneToOneConverionPattern`: Convert some operations in 1 to corresponding operations in other dialects one-to-one, such as converting `iree::input::BufferSubspanOp` to `iree::hal::BufferSubspanOp`, converting `iree::input: :TensorCloneOp` is converted to `iree::flow::TensorCloneOp`, etc.
 
@@ -1320,7 +1341,7 @@ The main functions and steps of this code are as follows:
 
 * `createWrapEntryPointsPass()`: Wrap the entry points in the module (such as `iree::hal::ExecutableEntryPointOp`) in an exported function (`iree::hal::ExportedFunctionOp`) so that they can be used according to the invocation model (such as `iree::hal::InvocationModel ::Async`) for scheduling and execution.
 
-* `createInlinerPass()`: Inline the function call (such as call) operation in the module into the caller to reduce the cost and complexity of the function call.
+* `createInlinerPass()`: Inline the function call operation in the module into the caller to reduce the cost and complexity of the function call.
 
 * `createCanonicalizerPass()`: Standardize and simplify the operations in the module and eliminate redundant and useless operations.
 
@@ -1492,6 +1513,7 @@ The main functions and steps of this code are as follows:
 ### Stream::StreamTransformPassPipeline
 
 The main function is to convert the program to stream dialect, optimize the variable encoding method, divide the scheduling subgraph, generate an asynchronous scheduling strategy, and implement the memory planning strategy. (The code is located in `compiler/src/iree/compiler/Dialect/Stream/Transforms`)
+
 Mainly achieved through buildStreamTransformPassPipeline.
 
 ```c++
@@ -1554,8 +1576,9 @@ The general idea of the code is as follows:
 
 ### HAL::HALTransformPassPipeline
 
-The main function is to perform operations such as tiling, vectorization and bufferization, allocate computing load, and finally generate the code for the target device. For example, the dispatch source code of cuda target will be descended to NVVM IR (the code is located at: `compiler/src/iree/compiler/Dialect/HAL/Transforms`)
-This pass is mainly implemented through buildHALTransformPassPipeline.
+The main function is to perform operations such as tiling, vectorization and bufferization, allocate computing load, and finally generate the code for the target device. For example, the dispatch source code of cuda target will be descended to NVVM IR (the code is located at: `compiler/src/iree/compiler/Dialect/HAL/Transforms`).
+
+This pass is mainly implemented through `buildHALTransformPassPipeline`.
 
 ```c++
 void buildHALTransformPassPipeline(OpPassManager &passManager,
@@ -1921,9 +1944,9 @@ Clacc makes no changes to LLVM IR code generation, so `ACCDeclAttr` nodes are ig
 
 To instantiate a C++ template, Clang uses TreeTransform to transform it. Specifically, Clang derives TemplateInstantiator from TreeTransform for this purpose.
 
-In TreeTransform, for each AST node, you must implement a member function that calls the same Sema operations that the parser normally calls to build that AST node. The difference with the parser is the input: instead of textual source code, the input consists of (1) the template's corresponding AST node, which is passed as an argument to the TreeTransform member function, and (2) the template parameters and other instantiation-specific information, which is contained in the TemplateInstantiator object.
+In TreeTransform, for each AST node, you must implement a member function that calls the same Sema operations that the parser normally calls to build that AST node. The difference with the parser is the input: instead of textual source code, the input consists of the template's corresponding AST node, which is passed as an argument to the TreeTransform member function, and the template parameters and other instantiation-specific information, which is contained in the TemplateInstantiator object.
 
-In contrast, TreeTransform is not a template specialization that provides a new template definition, but is parsed into a new AST node. For OpenACC AST nodes, such as ACCParallelDirective, Clacc adds implementations of related TreeTransform member functions, such as TransformACCParallelDirective.
+In contrast, TreeTransform is not a template specialization that provides a new template definition, but is parsed into a new AST node. For OpenACC AST nodes, such as `ACCParallelDirective`, Clacc adds implementations of related TreeTransform member functions, such as `TransformACCParallelDirective`.
 
 When parsing an original template or a partial template specialization, if actual template parameters are missing to determine whether an OpenACC directive violates a restriction, Clacc's OpenACC Sema operation assumes no violation, skips the relevant diagnostics, and continues building the AST. In the case where the template is instantiated, such undefined cases are eliminated. As mentioned above, Clacc's TreeTransform member function then performs the Sema operation again, thus diagnosing any constraint violations. Violations of constraints can be determined in the template despite missing template parameters, and instead of waiting for the template to be instantiated, Clacc's Sema operation diagnoses it immediately in the template, where the diagnosis is more helpful to the user.
 
@@ -1949,15 +1972,15 @@ However, this recursion usually only works for AST nodes that correspond to expl
 
 * Clacc's TreeTransform member function ignores previously calculated predetermined and implicitly determined clauses for the template. Doing so allows the Sema operation of the associated OpenACC directive to recompute the template instantiated clause from scratch.
 
-* After building a new AST node of an OpenACC directive with new such clauses, it calls TransformACCToOMP to recompute its OpenMP node based on these clauses.
+* After building a new AST node of an OpenACC directive with new such clauses, it calls `TransformACCToOMP` to recompute its OpenMP node based on these clauses.
 
-For example, in f in the previous example, Clacc's parallel-constructed Sema action evaluates an implicit reduction clause to indicate that the loop-constructed gang reduction is effectively performed there. However, in the instantiation of f in h , Clacc's Sema action for parallel construction now does not evaluate the implicit reduction clause due to a type compatibility error found for the explicit reduction clause on the loop construction. What's important here is that Clacc's parallel-constructed TreeTransform member function ignores the implicit reduction clause in the original template, because recursing and rebuilding with TreeTransform will trigger the same type compatibility diagnostic again, unless it's invisible to the user False reduction clause.
+For example, in f in the previous example, Clacc's parallel-constructed Sema action evaluates an implicit reduction clause to indicate that the loop-constructed gang reduction is effectively performed there. However, in the instantiation of f in h , Clacc's Sema action for parallel construction now does not evaluate the implicit reduction clause due to a type compatibility error found for the explicit reduction clause on the loop construction. What's important here is that Clacc's parallel-constructed `TreeTransform` member function ignores the implicit reduction clause in the original template, because recursing and rebuilding with `TreeTransform` will trigger the same type compatibility diagnostic again, unless it's invisible to the user False reduction clause.
 
 ## CUDA
 
 ### nvcc compile cuda
 
-This part of the content is mainly written with reference to NVIDIA official document NVCCNVIDIA CUDA Compiler Driver NVCC.
+This part of the content is mainly written with reference to NVIDIA official document NVCC NVIDIA CUDA Compiler Driver NVCC.
 
 The working principle of CUDA compilation is as follows: the input program is pre-processed by device compilation, compiled into a CUDA binary file (cubin) or PTX intermediate code, and placed in the fatbinary. The input program is again preprocessed for host compilation and synthesized to embed fatbinary and convert CUDA-specific C++ extensions into standard C++ structures. The C++ host compiler then compiles the synthesized host code with the embedded fatbinary into a host object. The overall compilation process is shown in the figure below:
 
