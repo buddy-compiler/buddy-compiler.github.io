@@ -54,7 +54,7 @@ Analyze and optimize workloads of various AI models and multimodal processes to 
 - **Expected Size of Project:** 350 hour
 - **Rate:** Hard
 
-### Project 2-3: Operations Optimization for GPU Platforms
+### Project 2-2: Operations Optimization for GPU Platforms
 
 - **Description**: This project involves multi-level optimizations with the GPU Dialect, Transform Dialect, Vector Dialect, Affine Dialect, etc., targeting the GPU platforms.
 - **Expected Outcomes:**
