@@ -6,7 +6,6 @@ nav_order: 2
 
 # Open Projects
 
-These open projects are specifically prepared for [Google Summer of Code (GSoC) 2024](https://summerofcode.withgoogle.com/) application.
 We are excited to invite passionate individuals to join us.
 If you are interested in making meaningful open-source contributions and gaining invaluable experience,
 contact us to become part of our team in this journey.
