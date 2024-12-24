@@ -6,6 +6,88 @@ parent: Documentation
 
 ## Buddy Compiler Code Styles
 
+### C++ Code Formatting
+
+This section outlines the C++ code style guidelines for the Buddy Compiler project, following the LLVM C++ Code Style conventions. Adherence to this style is important to maintain code consistency, readability, and maintainability across the codebase.
+
+**Formatting Tools**
+
+We use `clang-format` to automatically format all C++ code according to the LLVM style guidelines. It ensures that all code is formatted consistently, reducing the need for manual formatting and minimizing formatting-related review comments.
+
+To format a single file, run the following command:
+
+```
+$ clang-format -i <filename>
+```
+
+**Code Formatting Rules**
+
+The following code conventions are the key points we particularly want to emphasize.
+
+- Indentation
+
+    - Use 2 spaces for indentation (no tabs).
+    - Do not mix tabs and spaces.
+
+Example:
+
+```
+if (condition) {
+  // Indented with 2 spaces
+  doSomething();
+}
+```
+
+- Braces
+
+    - Always use braces `{}` around blocks, even for single statements.
+    - Place opening braces on the same line as the control statement (e.g., `if`, `for`).
+
+Example:
+
+```
+if (condition) {
+  doSomething();
+}
+
+for (int i = 0; i < 10; ++i) {
+  doSomethingElse();
+}
+```
+
+- Line Length
+
+    - Limit lines to 80 characters (ideally). If a line exceeds the limit, break it into multiple lines following the code style conventions.
+    - If some code requires longer lines or custom styles, you can disable formatting for that part of the code by using `// clang-format off` and `// clang-format on` around the section that needs to be excluded from automatic formatting.
+
+Example:
+
+```
+// clang-format off
+patterns.add<
+    BudTestConstantLowering,
+    BudTestPrintLowering,
+    BudTestEnumAttrLowering,
+    BudTestArrayAttrLowering>(patterns.getContext());
+// clang-format on
+```
+
+- Naming Conventions
+
+    - Variables: Use lowerCamelCase, which means the first letter is lowercase, and the first letter of each subsequent word is capitalized (e.g., myVariable, userInput).
+    - Functions: Use lowerCamelCase for function names (e.g., calculateSum, fetchData).
+    - Classes/Structs: Use UpperCamelCase (e.g., MyClass, UserInfo).
+    - Constants: Use UPPER_CASE_WITH_UNDERSCORES (e.g., MAX_VALUE, PI).
+
+Example:
+
+```
+int myVariable = 42;
+void calculateSum() { ... }
+class MyClass { ... };
+const int MAX_VALUE = 100;
+```
+
 ### Python Code Formatting
 
 Buddy Compiler adheres to the PEP 8 style guide while following the LLVM's formatting approach.
