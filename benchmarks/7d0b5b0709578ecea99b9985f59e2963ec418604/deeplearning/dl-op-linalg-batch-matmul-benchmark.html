@@ -1,0 +1,49 @@
+
+<style>
+body{font-family:system-ui,Arial,sans-serif;margin:2rem;max-width:80ch}
+table{border-collapse:collapse;margin:1rem 0}
+th,td{border:1px solid #bbb;padding:.3rem .6rem;text-align:right}
+th{text-align:center;background:#f0f0f0}
+tr:nth-child(even){background:#fafafa}
+details{border:1px solid #ccc;border-radius:.4rem;padding:.6rem}
+summary{font-weight:600;cursor:pointer}
+.err{border:2px solid #c00;background:#fee;padding:1rem;border-radius:.5rem}
+</style>
+
+<h2>deeplearning/dl-op-linalg-batch-matmul-benchmark.json</h2><p><em>2025-06-01 11:43:19 UTC</em></p>
+<h3>dl-op-linalg-batch-matmul-benchmark.json</h3>
+<table><tr><th>Name</th><th>Time&nbsp;(ms)</th><th>CPU&nbsp;(ms)</th><th>Iterations</th></tr>
+<tr><td style='text-align:left'>DL_OPS_BATCH_MATMUL/Scalar/iterations:1</td><td>3.53e+03</td><td>3.53e+03</td><td>1</td></tr>
+<tr><td style='text-align:left'>DL_OPS_BATCH_MATMUL/AutoVectorization/iterations:1</td><td>974</td><td>974</td><td>1</td></tr>
+<tr><td style='text-align:left'>DL_OPS_BATCH_MATMUL/Vectorization/iterations:1</td><td>191</td><td>191</td><td>1</td></tr>
+<tr><td style='text-align:left'>DL_OPS_BATCH_MATMUL/Tile/iterations:1</td><td>109</td><td>109</td><td>1</td></tr>
+<tr><td style='text-align:left'>DL_OPS_BATCH_MATMUL/SCF/iterations:1</td><td>117</td><td>117</td><td>1</td></tr>
+<tr><td style='text-align:left'>DL_OPS_BATCH_MATMUL/BROADCAST/iterations:1</td><td>351</td><td>351</td><td>1</td></tr>
+<tr><td style='text-align:left'>DL_OPS_BATCH_MATMUL/BROADCAST_OMP/iterations:1</td><td>80.6</td><td>32.1</td><td>1</td></tr></table>
+<details><summary>Console output</summary>
+<pre>2025-06-01T09:43:41+00:00
+Running ./dl-op-linalg-batch-matmul-benchmark
+Run on (24 X 5100 MHz CPU s)
+CPU Caches:
+  L1 Data 48 KiB (x12)
+  L1 Instruction 32 KiB (x12)
+  L2 Unified 1280 KiB (x12)
+  L3 Unified 30720 KiB (x1)
+Load Average: 1.01, 1.87, 3.91
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+---------------------------------------------------------------------------------------------
+Benchmark                                                   Time             CPU   Iterations
+---------------------------------------------------------------------------------------------
+DL_OPS_BATCH_MATMUL/Scalar/iterations:1                  3529 ms         3529 ms            1
+DL_OPS_BATCH_MATMUL/AutoVectorization/iterations:1        974 ms          974 ms            1
+DL_OPS_BATCH_MATMUL/Vectorization/iterations:1            191 ms          191 ms            1
+DL_OPS_BATCH_MATMUL/Tile/iterations:1                     109 ms          109 ms            1
+DL_OPS_BATCH_MATMUL/SCF/iterations:1                      117 ms          117 ms            1
+DL_OPS_BATCH_MATMUL/BROADCAST/iterations:1                351 ms          351 ms            1
+DL_OPS_BATCH_MATMUL/BROADCAST_OMP/iterations:1           80.6 ms         32.1 ms            1
+[34m---------- Verification ----------[0m
+Tile [32mPASS[0m
+SCF [32mPASS[0m
+BROADCAST [32mPASS[0m
+BROADCAST_OMP [32mPASS[0m
+</pre></details>

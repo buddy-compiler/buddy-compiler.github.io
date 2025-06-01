@@ -1,0 +1,38 @@
+
+<style>
+body{font-family:system-ui,Arial,sans-serif;margin:2rem;max-width:80ch}
+table{border-collapse:collapse;margin:1rem 0}
+th,td{border:1px solid #bbb;padding:.3rem .6rem;text-align:right}
+th{text-align:center;background:#f0f0f0}
+tr:nth-child(even){background:#fafafa}
+details{border:1px solid #ccc;border-radius:.4rem;padding:.6rem}
+summary{font-weight:600;cursor:pointer}
+.err{border:2px solid #c00;background:#fee;padding:1rem;border-radius:.5rem}
+</style>
+
+<h2>deeplearning/dl-op-linalg-pooling-nhwc-sum-benchmark.json</h2><p><em>2025-06-01 11:43:19 UTC</em></p>
+<h3>dl-op-linalg-pooling-nhwc-sum-benchmark.json</h3>
+<table><tr><th>Name</th><th>Time&nbsp;(ms)</th><th>CPU&nbsp;(ms)</th><th>Iterations</th></tr>
+<tr><td style='text-align:left'>BM_POOLING_NHWC_SUM_SCALAR</td><td>0.233</td><td>0.233</td><td>2,993</td></tr>
+<tr><td style='text-align:left'>BM_POOLING_NHWC_SUM_AutoVectorization</td><td>0.0414</td><td>0.0414</td><td>16,954</td></tr></table>
+<details><summary>Console output</summary>
+<pre>2025-06-01T09:43:38+00:00
+Running ./dl-op-linalg-pooling-nhwc-sum-benchmark
+Run on (24 X 5100 MHz CPU s)
+CPU Caches:
+  L1 Data 48 KiB (x12)
+  L1 Instruction 32 KiB (x12)
+  L2 Unified 1280 KiB (x12)
+  L3 Unified 30720 KiB (x1)
+Load Average: 1.01, 1.87, 3.91
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+--------------------------------------------------------------------------------
+Benchmark                                      Time             CPU   Iterations
+--------------------------------------------------------------------------------
+BM_POOLING_NHWC_SUM_SCALAR                 0.233 ms        0.233 ms         2993
+BM_POOLING_NHWC_SUM_AutoVectorization      0.041 ms        0.041 ms        16954
+-----------------------------------------------------------
+Correctness Verification:
+Transform case: [32mPASS[0m
+-----------------------------------------------------------
+</pre></details>
