@@ -63,19 +63,16 @@ If you are interested in our project, you can play around with examples in [budd
 
 ## Benchmark reports
 
-Below is the list of all benchmark runs we’ve published.  
-(Click the SHA to open one of the HTML reports for that run.)
+Below is the list of all benchmark runs we’ve published.
 
 <ul>
   {% assign seen = "" | split: "" %}
-  {% for file in site.static_files %}
-    {% if file.path contains "benchmarks/" and file.extname == ".html" %}
-      {% assign parts = file.path | split: "/" %}
-      {% assign sha   = parts[1] %}
+  {% for f in site.static_files %}
+    {% if f.path contains "benchmarks/" and f.name == "index.html" %}
+      {% assign parts = f.path | split: "/" %}
+      {% assign sha = parts[1] %}
       {% unless seen contains sha %}
-        <li>
-          <a href="/{{ file.path }}">{{ sha }}</a>
-        </li>
+        <li><a href="/benchmarks/{{ sha }}/">{{ sha }}</a></li>
         {% assign seen = seen | push: sha %}
       {% endunless %}
     {% endif %}
