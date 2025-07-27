@@ -64,31 +64,37 @@ If you are interested in our project, you can play around with examples in [budd
 ## Benchmark reports
 Below is the list of all benchmark runs we’ve published.
 
+Below is the list of all benchmark runs we’ve published.
+
 <ul>
-{% assign seen = "" | split: "" %}
 {% for f in site.static_files %}
-  {% if f.path contains "benchmarks/" and
-        f.name == "index.html" and
+  {% if f.name == "index.html" and
+        f.path contains "benchmarks/" and
         f.path != "benchmarks/index.html" and
         f.path != "benchmarks/latest/index.html" %}
-    {% assign parts = f.path | split: "/" %}
+    {%- comment -%}
+      Strip the leading folder so we can tell which layout we’re in:
+      benchmarks/<date>/<sha>/index.html → ["<date>", "<sha>", "index.html"]
+      benchmarks/<sha>/index.html       → ["<sha>", "index.html"]
+    {%- endcomment -%}
+    {% assign rest = f.path | remove_first: "benchmarks/" %}
+    {% assign parts = rest | split: "/" %}
+
     {% if parts.size == 3 %}
-      {% assign date = parts[1] %}
-      {% assign sha  = parts[2] %}
-      {% unless seen contains sha %}
-        <li><a href="/benchmarks/{{ date }}/{{ sha }}/">
-            {{ date }} – {{ sha | slice: 0,7 }}
-        </a></li>
-        {% assign seen = seen | push: sha %}
-      {% endunless %}
+      {% assign date = parts[0] %}
+      {% assign sha  = parts[1] %}
+      <li>
+        <a href="/benchmarks/{{ date }}/{{ sha }}/">
+          {{ date }} – {{ sha | slice: 0,7 }}
+        </a>
+      </li>
     {% elsif parts.size == 2 %}
-      {% assign sha = parts[1] %}
-      {% unless seen contains sha %}
-        <li><a href="/benchmarks/{{ sha }}/">
-            {{ sha | slice: 0,7 }}
-        </a></li>
-        {% assign seen = seen | push: sha %}
-      {% endunless %}
+      {% assign sha = parts[0] %}
+      <li>
+        <a href="/benchmarks/{{ sha }}/">
+          {{ sha | slice: 0,7 }}
+        </a>
+      </li>
     {% endif %}
   {% endif %}
 {% endfor %}
