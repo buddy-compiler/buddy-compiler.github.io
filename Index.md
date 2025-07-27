@@ -65,25 +65,34 @@ If you are interested in our project, you can play around with examples in [budd
 Below is the list of all benchmark runs we’ve published.
 
 <ul>
-{% assign runs = site.static_files
-   | where: "name", "index.html"
-   | where_exp: "f", "f.path contains 'benchmarks/' and
-                  f.path != 'benchmarks/index.html' and
-                  f.path != 'benchmarks/latest/index.html'" %}
-{% assign runs = runs | map: "path" | sort | uniq %}
-{% for path in runs %}
-  {% assign parts = path | split: "/" %}
-  {% if parts.size == 3 %}
-    {% assign date = parts[1] %}
-    {% assign sha  = parts[2] %}
-    <li><a href="/benchmarks/{{ date }}/{{ sha }}/">
-        {{ date }} – {{ sha | truncate: 7 }}
-    </a></li>
-  {% else %}   {# fallback for benchmarks/<sha>/ #}
-    {% assign sha = parts[1] %}
-    <li><a href="/benchmarks/{{ sha }}/">{{ sha | truncate: 7 }}</a></li>
+{% assign seen = "" | split: "" %}
+{% for f in site.static_files %}
+  {% if f.path contains "benchmarks/" and
+        f.name == "index.html" and
+        f.path != "benchmarks/index.html" and
+        f.path != "benchmarks/latest/index.html" %}
+    {% assign parts = f.path | split: "/" %}
+    {% if parts.size == 3 %}
+      {% assign date = parts[1] %}
+      {% assign sha  = parts[2] %}
+      {% unless seen contains sha %}
+        <li><a href="/benchmarks/{{ date }}/{{ sha }}/">
+            {{ date }} – {{ sha | slice: 0,7 }}
+        </a></li>
+        {% assign seen = seen | push: sha %}
+      {% endunless %}
+    {% elsif parts.size == 2 %}
+      {% assign sha = parts[1] %}
+      {% unless seen contains sha %}
+        <li><a href="/benchmarks/{{ sha }}/">
+            {{ sha | slice: 0,7 }}
+        </a></li>
+        {% assign seen = seen | push: sha %}
+      {% endunless %}
+    {% endif %}
   {% endif %}
 {% endfor %}
 </ul>
+
 
 
