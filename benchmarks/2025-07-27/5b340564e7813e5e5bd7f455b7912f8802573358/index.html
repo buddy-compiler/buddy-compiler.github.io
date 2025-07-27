@@ -1,0 +1,14 @@
+---
+layout: default
+title: Benchmark run
+---
+
+<h1>Benchmark results</h1>
+
+<ul>
+{% for f in site.static_files %}
+  {% if f.path contains page.dir and f.name != "index.html" and f.extname == ".html" %}
+    <li><a href="/{{ f.path }}">{{ f.name }}</a></li>
+  {% endif %}
+{% endfor %}
+</ul>
