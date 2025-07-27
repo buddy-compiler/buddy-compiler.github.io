@@ -61,21 +61,21 @@ The graph below shows the modules of the buddy compiler.
 
 If you are interested in our project, you can play around with examples in [buddy-mlir](https://github.com/buddy-compiler/buddy-mlir) and [buddy-benchmark](https://github.com/buddy-compiler/buddy-benchmark). Then you can see if there are [projects in the list](./Pages/OpenProjects.md) that appeal to you; feel free to contact us via [slack](https://join.slack.com/t/buddycompiler/shared_invite/zt-13y6ibj4j-n6MQ8u9yCUPltCCDhLEmXg) for more details. We also provide a [contributor guide](./Pages/ContributorGuide.md) for you if you want to contribute your code.
 
-# Benchmark reports
+## Benchmark reports
 
 Below is the list of all benchmark runs we’ve published. Click a SHA to see the full report.
 
 <ul>
-  {% assign bm_pages = site.pages | where_exp: "p", "p.path contains 'benchmarks/'" %}
-  {% for p in bm_pages %}
-    {% if p.name == "index.html" %}
-      {% assign parts = p.path | split: "/" %}
-      {% assign sha = parts[1] %}
-      <li>
-        <a href="{{ p.url }}">
-          {{ sha }}
-        </a>
-      </li>
-    {% endif %}
+  {% assign bm_files = site.static_files
+       | where_exp: "f", "f.path contains 'benchmarks/' and f.name == 'index.html'" %}
+  {% assign bm_files = bm_files | sort: "path" | reverse %}
+  {% for f in bm_files %}
+    {% assign parts = f.path | split: "/" %}
+    {% assign sha   = parts[1] %}
+    <li>
+      <a href="{{ f.path | replace: '/index.html', '/' }}">
+        {{ sha }}
+      </a>
+    </li>
   {% endfor %}
 </ul>
