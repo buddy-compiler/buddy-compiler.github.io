@@ -1,0 +1,13 @@
+---
+layout: default
+title: Benchmark run
+---
+<h1>Benchmark results</h1>
+<ul>
+{% assign here = page.dir %}
+{% for f in site.static_files %}
+  {% if f.path startswith here and f.extname == ".html" and f.name != "index.html" %}
+    <li><a href="/{{ f.path }}">{{ f.name }}</a></li>
+  {% endif %}
+{% endfor %}
+</ul>
