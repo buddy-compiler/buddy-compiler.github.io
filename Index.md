@@ -62,20 +62,28 @@ The graph below shows the modules of the buddy compiler.
 If you are interested in our project, you can play around with examples in [buddy-mlir](https://github.com/buddy-compiler/buddy-mlir) and [buddy-benchmark](https://github.com/buddy-compiler/buddy-benchmark). Then you can see if there are [projects in the list](./Pages/OpenProjects.md) that appeal to you; feel free to contact us via [slack](https://join.slack.com/t/buddycompiler/shared_invite/zt-13y6ibj4j-n6MQ8u9yCUPltCCDhLEmXg) for more details. We also provide a [contributor guide](./Pages/ContributorGuide.md) for you if you want to contribute your code.
 
 ## Benchmark reports
-
 Below is the list of all benchmark runs we’ve published.
 
 <ul>
-{% assign seen = "" | split: "" %}
-{% for f in site.static_files %}
-  {% if f.path contains "benchmarks/" and f.name == "index.html" %}
-    {% assign sha = f.path | split: "/" | slice: 1, 1 | first %}
-    {% unless seen contains sha %}
-      <li><a href="/benchmarks/{{ sha }}/">{{ sha }}</a></li>
-      {% assign seen = seen | push: sha %}
-    {% endunless %}
+{% assign runs = site.static_files
+   | where: "name", "index.html"
+   | where_exp: "f", "f.path contains 'benchmarks/' and
+                  f.path != 'benchmarks/index.html' and
+                  f.path != 'benchmarks/latest/index.html'" %}
+{% assign runs = runs | map: "path" | sort | uniq %}
+{% for path in runs %}
+  {% assign parts = path | split: "/" %}
+  {% if parts.size == 3 %}
+    {% assign date = parts[1] %}
+    {% assign sha  = parts[2] %}
+    <li><a href="/benchmarks/{{ date }}/{{ sha }}/">
+        {{ date }} – {{ sha | truncate: 7 }}
+    </a></li>
+  {% else %}   {# fallback for benchmarks/<sha>/ #}
+    {% assign sha = parts[1] %}
+    <li><a href="/benchmarks/{{ sha }}/">{{ sha | truncate: 7 }}</a></li>
   {% endif %}
 {% endfor %}
-
 </ul>
+
 
