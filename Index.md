@@ -64,41 +64,42 @@ If you are interested in our project, you can play around with examples in [budd
 ## Benchmark reports
 Below is the list of all benchmark runs we’ve published.
 
-Below is the list of all benchmark runs we’ve published.
-
-Below is the list of all benchmark runs we’ve published.
-
 <ul>
-{%- comment -%}
-  Collect every static file named “index.html” that lives *somewhere*
-  under /benchmarks/, then loop over them.  We’ll skip the two helper
-  pages benchmarks/index.html  and  benchmarks/latest/index.html.
-{%- endcomment -%}
-{% assign runs = site.static_files | where: "name", "index.html" %}
-{% for f in runs %}
-  {% unless f.path contains "benchmarks/index.html" or
-            f.path contains "benchmarks/latest/index.html" %}
+{% assign printed = "" | split: "" %}
+{% for p in site.pages %}
+  {% if p.name == "index.html"
+        and p.path contains "benchmarks/"
+        and p.path != "benchmarks/index.html"
+        and p.path != "benchmarks/latest/index.html" %}
 
-    {%- assign rel = f.path | remove_first: "benchmarks/" -%}
+    {%- assign rel = p.path | remove_first: "benchmarks/" -%}
     {%- assign parts = rel | split: "/" -%}
 
-    {%- if parts.size == 3 -%}          {# date / sha / index.html #}
+    {%- if parts.size == 3 -%}      {# date / sha / index.html #}
       {% assign date = parts[0] %}
       {% assign sha  = parts[1] %}
-      <li><a href="/benchmarks/{{ date }}/{{ sha }}/">
-          {{ date }} – {{ sha | slice: 0, 7 }}
-      </a></li>
+      {% assign key  = date | append: sha %}
+      {% unless printed contains key %}
+        <li>
+          <a href="/benchmarks/{{ date }}/{{ sha }}/">
+            {{ date }} – {{ sha | slice: 0,7 }}
+          </a>
+        </li>
+        {% assign printed = printed | push: key %}
+      {% endunless %}
 
-    {%- elsif parts.size == 2 -%}       {# sha / index.html #}
+    {%- elsif parts.size == 2 -%}   {# sha / index.html #}
       {% assign sha = parts[0] %}
-      <li><a href="/benchmarks/{{ sha }}/">
-          {{ sha | slice: 0, 7 }}
-      </a></li>
+      {% unless printed contains sha %}
+        <li>
+          <a href="/benchmarks/{{ sha }}/">
+            {{ sha | slice: 0,7 }}
+          </a>
+        </li>
+        {% assign printed = printed | push: sha %}
+      {% endunless %}
     {%- endif -%}
 
-  {% endunless %}
+  {% endif %}
 {% endfor %}
 </ul>
-
-
-
