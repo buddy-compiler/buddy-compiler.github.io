@@ -60,3 +60,22 @@ The graph below shows the modules of the buddy compiler.
 ## Next Steps
 
 If you are interested in our project, you can play around with examples in [buddy-mlir](https://github.com/buddy-compiler/buddy-mlir) and [buddy-benchmark](https://github.com/buddy-compiler/buddy-benchmark). Then you can see if there are [projects in the list](./Pages/OpenProjects.md) that appeal to you; feel free to contact us via [slack](https://join.slack.com/t/buddycompiler/shared_invite/zt-13y6ibj4j-n6MQ8u9yCUPltCCDhLEmXg) for more details. We also provide a [contributor guide](./Pages/ContributorGuide.md) for you if you want to contribute your code.
+
+# Benchmark reports
+
+Below is the list of all benchmark runs we’ve published. Click a SHA to see the full report.
+
+<ul>
+  {% assign bm_pages = site.pages | where_exp: "p", "p.path contains 'benchmarks/'" %}
+  {% for p in bm_pages %}
+    {% if p.name == "index.html" %}
+      {% assign parts = p.path | split: "/" %}
+      {% assign sha = parts[1] %}
+      <li>
+        <a href="{{ p.url }}">
+          {{ sha }}
+        </a>
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>
