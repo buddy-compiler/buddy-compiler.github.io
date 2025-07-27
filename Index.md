@@ -66,37 +66,37 @@ Below is the list of all benchmark runs we’ve published.
 
 Below is the list of all benchmark runs we’ve published.
 
-<ul>
-{% for f in site.static_files %}
-  {% if f.name == "index.html" and
-        f.path contains "benchmarks/" and
-        f.path != "benchmarks/index.html" and
-        f.path != "benchmarks/latest/index.html" %}
-    {%- comment -%}
-      Strip the leading folder so we can tell which layout we’re in:
-      benchmarks/<date>/<sha>/index.html → ["<date>", "<sha>", "index.html"]
-      benchmarks/<sha>/index.html       → ["<sha>", "index.html"]
-    {%- endcomment -%}
-    {% assign rest = f.path | remove_first: "benchmarks/" %}
-    {% assign parts = rest | split: "/" %}
+Below is the list of all benchmark runs we’ve published.
 
-    {% if parts.size == 3 %}
+<ul>
+{%- comment -%}
+  Collect every static file named “index.html” that lives *somewhere*
+  under /benchmarks/, then loop over them.  We’ll skip the two helper
+  pages benchmarks/index.html  and  benchmarks/latest/index.html.
+{%- endcomment -%}
+{% assign runs = site.static_files | where: "name", "index.html" %}
+{% for f in runs %}
+  {% unless f.path contains "benchmarks/index.html" or
+            f.path contains "benchmarks/latest/index.html" %}
+
+    {%- assign rel = f.path | remove_first: "benchmarks/" -%}
+    {%- assign parts = rel | split: "/" -%}
+
+    {%- if parts.size == 3 -%}          {# date / sha / index.html #}
       {% assign date = parts[0] %}
       {% assign sha  = parts[1] %}
-      <li>
-        <a href="/benchmarks/{{ date }}/{{ sha }}/">
-          {{ date }} – {{ sha | slice: 0,7 }}
-        </a>
-      </li>
-    {% elsif parts.size == 2 %}
+      <li><a href="/benchmarks/{{ date }}/{{ sha }}/">
+          {{ date }} – {{ sha | slice: 0, 7 }}
+      </a></li>
+
+    {%- elsif parts.size == 2 -%}       {# sha / index.html #}
       {% assign sha = parts[0] %}
-      <li>
-        <a href="/benchmarks/{{ sha }}/">
-          {{ sha | slice: 0,7 }}
-        </a>
-      </li>
-    {% endif %}
-  {% endif %}
+      <li><a href="/benchmarks/{{ sha }}/">
+          {{ sha | slice: 0, 7 }}
+      </a></li>
+    {%- endif -%}
+
+  {% endunless %}
 {% endfor %}
 </ul>
 
