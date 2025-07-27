@@ -7,3 +7,5 @@ url: "https://buddy-compiler.github.io"
 sidebar: true
 color_scheme: buddy
 logo: "./Images/buddy-compiler-logo.png"
+url: "https://buddycompiler.com"   # custom domain
+baseurl: ""                        # empty → site is served from the root
