@@ -3,9 +3,13 @@ remote_theme: zhanghb97/just-the-docs
 title: Buddy Compiler
 description: Domain Specific Compiler Infrastructure
 markdown: kramdown
-url: "https://buddy-compiler.github.io"
+url: "https://buddycompiler.com"
+baseurl: ""
 sidebar: true
 color_scheme: buddy
 logo: "./Images/buddy-compiler-logo.png"
-url: "https://buddycompiler.com"   # custom domain
-baseurl: ""                        # empty → site is served from the root
+nav:
+  - title: "Home"
+    url:   /
+  - title: "Benchmarks"
+    url:   /benchmarks/latest/
