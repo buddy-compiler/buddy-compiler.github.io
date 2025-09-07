@@ -1,0 +1,44 @@
+
+<style>
+body{font-family:system-ui,Arial,sans-serif;margin:2rem;max-width:80ch}
+table{border-collapse:collapse;margin:1rem 0}
+th,td{border:1px solid #bbb;padding:.3rem .6rem;text-align:right}
+th{text-align:center;background:#f0f0f0}
+tr:nth-child(even){background:#fafafa}
+details{border:1px solid #ccc;border-radius:.4rem;padding:.6rem}
+summary{font-weight:600;cursor:pointer}
+.err{border:2px solid #c00;background:#fee;padding:1rem;border-radius:.5rem}
+</style>
+
+<h2>deeplearning/dl-op-linalg-matmul-benchmark.json</h2><p><em>2025-09-07 15:39:28 UTC</em></p>
+<h3>dl-op-linalg-matmul-benchmark.json</h3>
+<table><tr><th>Name</th><th>Time&nbsp;(ms)</th><th>CPU&nbsp;(ms)</th><th>Iterations</th></tr>
+<tr><td style='text-align:left'>DL_OPS_MATMUL/scalar_O0/iterations:1</td><td>4.1e+03</td><td>4.1e+03</td><td>1</td></tr>
+<tr><td style='text-align:left'>DL_OPS_MATMUL/scalar_O3/iterations:1</td><td>3.58e+03</td><td>3.58e+03</td><td>1</td></tr>
+<tr><td style='text-align:left'>DL_OPS_MATMUL/tile/iterations:1</td><td>108</td><td>108</td><td>1</td></tr>
+<tr><td style='text-align:left'>DL_OPS_MATMUL/vec/iterations:1</td><td>61.4</td><td>61.4</td><td>1</td></tr>
+<tr><td style='text-align:left'>DL_OPS_MATMUL/vec_omp/iterations:1</td><td>18.5</td><td>7.88</td><td>1</td></tr></table>
+<details><summary>Console output</summary>
+<pre>2025-09-07T12:45:36+00:00
+Running ./dl-op-linalg-matmul-benchmark
+Run on (24 X 5100 MHz CPU s)
+CPU Caches:
+  L1 Data 48 KiB (x12)
+  L1 Instruction 32 KiB (x12)
+  L2 Unified 1280 KiB (x12)
+  L3 Unified 30720 KiB (x1)
+Load Average: 2.48, 3.39, 5.15
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+-------------------------------------------------------------------------------
+Benchmark                                     Time             CPU   Iterations
+-------------------------------------------------------------------------------
+DL_OPS_MATMUL/scalar_O0/iterations:1       4100 ms         4100 ms            1
+DL_OPS_MATMUL/scalar_O3/iterations:1       3583 ms         3583 ms            1
+DL_OPS_MATMUL/tile/iterations:1             108 ms          108 ms            1
+DL_OPS_MATMUL/vec/iterations:1             61.4 ms         61.4 ms            1
+DL_OPS_MATMUL/vec_omp/iterations:1         18.5 ms         7.88 ms            1
+[34m---------- Verification ----------[0m
+tile [32mPASS[0m
+vec [32mPASS[0m
+vec_omp [32mPASS[0m
+</pre></details>
