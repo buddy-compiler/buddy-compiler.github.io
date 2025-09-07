@@ -1,44 +1,11 @@
 ---
 layout: default
-title: Benchmark run
-nav_order: 2
+title: Benchmarks
+nav_exclude: true
 ---
 <h1>Benchmark runs</h1>
 <p>Select a date and commit:</p>
-
-{% assign key_str = '' %}
-{% for file in site.static_files %}
-  {% if file.path contains '/benchmarks/' %}
-    {% assign path = file.path | replace: '/benchmarks/', '' %}
-    {% assign parts = path | split: '/' %}
-    {% if parts.size >= 2 %}
-      {% assign date = parts[0] %}
-      {% assign sha = parts[1] %}
-      {% if date contains '-' and date.size == 10 and sha != '' and sha != 'index.html' %}
-        {% capture pair %}{{ date }}/{{ sha }}{% endcapture %}
-        {% unless key_str contains pair %}
-          {% assign key_str = key_str | append: pair | append: '|' %}
-        {% endunless %}
-      {% endif %}
-    {% endif %}
-  {% endif %}
-{% endfor %}
-
-{% assign runs = key_str | split: '|' | uniq | sort | reverse %}
-
-{% assign current_date = '' %}
-{% for run in runs %}
-  {% if run != '' %}
-    {% assign parts = run | split: '/' %}
-    {% assign date = parts[0] %}
-    {% assign sha = parts[1] %}
-    {% if date != current_date %}
-      {% unless forloop.first %}</ul>{% endunless %}
-      <h2>{{ date }}</h2>
-      <ul>
-      {% assign current_date = date %}
-    {% endif %}
-    <li><a href="/benchmarks/{{ run }}/">{{ run }}</a></li>
-    {% if forloop.last %}</ul>{% endif %}
-  {% endif %}
-{% endfor %}
+<h2>2025-09-07</h2>
+<ul>
+  <li><a href="/benchmarks/2025-09-07/b88ff30a4c897fc819769f89be18311350f7fec4/">2025-09-07/b88ff30a4c897fc819769f89be18311350f7fec4</a></li>
+</ul>
