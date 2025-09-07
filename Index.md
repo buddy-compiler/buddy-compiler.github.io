@@ -75,7 +75,7 @@ Below is the list of all benchmark runs we’ve published.
     {%- assign rel = p.path | remove_first: "benchmarks/" -%}
     {%- assign parts = rel | split: "/" -%}
 
-    {%- if parts.size == 3 -%}      {# date / sha / index.html #}
+    {%- if parts.size == 3 -%}
       {% assign date = parts[0] %}
       {% assign sha  = parts[1] %}
       {% assign key  = date | append: sha %}
