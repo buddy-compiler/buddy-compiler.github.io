@@ -61,45 +61,8 @@ The graph below shows the modules of the buddy compiler.
 
 If you are interested in our project, you can play around with examples in [buddy-mlir](https://github.com/buddy-compiler/buddy-mlir) and [buddy-benchmark](https://github.com/buddy-compiler/buddy-benchmark). Then you can see if there are [projects in the list](./Pages/OpenProjects.md) that appeal to you; feel free to contact us via [slack](https://join.slack.com/t/buddycompiler/shared_invite/zt-13y6ibj4j-n6MQ8u9yCUPltCCDhLEmXg) for more details. We also provide a [contributor guide](./Pages/ContributorGuide.md) for you if you want to contribute your code.
 
-## Benchmark reports
-Below is the list of all benchmark runs we’ve published.
+## Benchmarks
+Explore benchmark results by date and commit on the Benchmarks page.
 
-<ul>
-{% assign printed = "" | split: "" %}
-{% for p in site.pages %}
-  {% if p.name == "index.html"
-        and p.path contains "benchmarks/"
-        and p.path != "benchmarks/index.html"
-        and p.path != "benchmarks/latest/index.html" %}
-
-    {%- assign rel = p.path | remove_first: "benchmarks/" -%}
-    {%- assign parts = rel | split: "/" -%}
-
-    {%- if parts.size == 3 -%}
-      {% assign date = parts[0] %}
-      {% assign sha  = parts[1] %}
-      {% assign key  = date | append: sha %}
-      {% unless printed contains key %}
-        <li>
-          <a href="/benchmarks/{{ date }}/{{ sha }}/">
-            {{ date }} – {{ sha | slice: 0,7 }}
-          </a>
-        </li>
-        {% assign printed = printed | push: key %}
-      {% endunless %}
-
-    {%- elsif parts.size == 2 -%}   {# sha / index.html #}
-      {% assign sha = parts[0] %}
-      {% unless printed contains sha %}
-        <li>
-          <a href="/benchmarks/{{ sha }}/">
-            {{ sha | slice: 0,7 }}
-          </a>
-        </li>
-        {% assign printed = printed | push: sha %}
-      {% endunless %}
-    {%- endif -%}
-
-  {% endif %}
-{% endfor %}
-</ul>
+- View all runs: <a href="/benchmarks/" class="btn btn-primary">Benchmarks</a>
+- Latest run: <a href="/benchmarks/latest/">/benchmarks/latest/</a>
