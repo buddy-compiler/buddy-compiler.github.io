@@ -1,0 +1,95 @@
+
+<style>
+body{font-family:system-ui,Arial,sans-serif;margin:2rem;max-width:80ch}
+table{border-collapse:collapse;margin:1rem 0}
+th,td{border:1px solid #bbb;padding:.3rem .6rem;text-align:right}
+th{text-align:center;background:#f0f0f0}
+tr:nth-child(even){background:#fafafa}
+details{border:1px solid #ccc;border-radius:.4rem;padding:.6rem}
+summary{font-weight:600;cursor:pointer}
+.err{border:2px solid #c00;background:#fee;padding:1rem;border-radius:.5rem}
+</style>
+
+<h2>imageprocessing/AVX2_YuTu_logKernelAlign_random3x3KernelAlignInt_REPLICATE_PADDING.json</h2><p><em>2025-09-07 13:14:37 UTC</em></p>
+<h3>AVX2_YuTu_logKernelAlign_random3x3KernelAlignInt_REPLICATE_PADDING.json</h3>
+<table><tr><th>Name</th><th>Time&nbsp;(ms)</th><th>CPU&nbsp;(ms)</th><th>Iterations</th></tr>
+<tr><td style='text-align:left'>Eigen_Convolve2D/1</td><td>12.1</td><td>12.1</td><td>58</td></tr>
+<tr><td style='text-align:left'>MLIR_Conv2D/1</td><td>30.7</td><td>30.7</td><td>23</td></tr>
+<tr><td style='text-align:left'>Buddy_Conv2D/1</td><td>1.03</td><td>1.03</td><td>682</td></tr>
+<tr><td style='text-align:left'>Buddy_Corr2D_Constant_Padding/1</td><td>1.87</td><td>1.87</td><td>369</td></tr>
+<tr><td style='text-align:left'>OpenCV_Filter2D_Constant_Padding/1</td><td>2.8</td><td>2.8</td><td>249</td></tr>
+<tr><td style='text-align:left'>Buddy_Resize2D_Nearest_Neighbour_Interpolation/1</td><td>0.149</td><td>0.149</td><td>4,676</td></tr>
+<tr><td style='text-align:left'>Buddy_Resize2D_Bilinear_Interpolation/1</td><td>0.273</td><td>0.273</td><td>2,573</td></tr>
+<tr><td style='text-align:left'>OpenCV_Resize2D_Nearest_Neighbour_Interpolation/1</td><td>0.0069</td><td>0.0069</td><td>101,945</td></tr>
+<tr><td style='text-align:left'>OpenCV_Resize2D_Bilinear_Interpolation/1</td><td>0.0146</td><td>0.0146</td><td>48,219</td></tr>
+<tr><td style='text-align:left'>Buddy_Erosion2D_Constant_Padding/1</td><td>0.246</td><td>0.246</td><td>2,797</td></tr>
+<tr><td style='text-align:left'>Buddy_Dilation2D_Constant_Padding/1</td><td>0.254</td><td>0.254</td><td>2,766</td></tr>
+<tr><td style='text-align:left'>Buddy_Opening2D_Constant_Padding/1</td><td>0.386</td><td>0.386</td><td>1,746</td></tr>
+<tr><td style='text-align:left'>Buddy_Closing2D_Constant_Padding/1</td><td>0.409</td><td>0.409</td><td>1,774</td></tr>
+<tr><td style='text-align:left'>Buddy_TopHat2D_Constant_Padding/1</td><td>1.01</td><td>1.01</td><td>683</td></tr>
+<tr><td style='text-align:left'>Buddy_BottomHat2D_Constant_Padding/1</td><td>1.02</td><td>1.02</td><td>678</td></tr>
+<tr><td style='text-align:left'>OpenCV_Erode2D_Constant_Padding/1</td><td>0.145</td><td>0.145</td><td>4,842</td></tr>
+<tr><td style='text-align:left'>OpenCV_Opening2D_Constant_Padding/1</td><td>0.227</td><td>0.227</td><td>3,067</td></tr>
+<tr><td style='text-align:left'>OpenCV_Closing2D_Constant_Padding/1</td><td>0.229</td><td>0.229</td><td>3,056</td></tr>
+<tr><td style='text-align:left'>OpenCV_TopHat2D_Constant_Padding/1</td><td>0.26</td><td>0.26</td><td>2,685</td></tr>
+<tr><td style='text-align:left'>OpenCV_BottomHat2D_Constant_Padding/1</td><td>0.261</td><td>0.261</td><td>2,731</td></tr>
+<tr><td style='text-align:left'>OpenCV_MorphGrad2D_Constant_Padding/1</td><td>0.27</td><td>0.27</td><td>2,609</td></tr>
+<tr><td style='text-align:left'>OpenCV_Dilate2D_Constant_Padding/1</td><td>0.143</td><td>0.143</td><td>4,928</td></tr></table>
+<details><summary>Console output</summary>
+<pre>2025-09-07T13:14:03+00:00
+Running ./bin/image-processing-benchmark
+Run on (24 X 5100 MHz CPU s)
+CPU Caches:
+  L1 Data 48 KiB (x12)
+  L1 Instruction 32 KiB (x12)
+  L2 Unified 1280 KiB (x12)
+  L3 Unified 30720 KiB (x1)
+Load Average: 2.92, 3.26, 4.94
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+--------------------------------------------------------------------------------------------
+Benchmark                                                  Time             CPU   Iterations
+--------------------------------------------------------------------------------------------
+Eigen_Convolve2D/1                                      12.1 ms         12.1 ms           58
+MLIR_Conv2D/1                                           30.7 ms         30.7 ms           23
+Buddy_Conv2D/1                                          1.03 ms         1.03 ms          682
+Buddy_Corr2D_Constant_Padding/1                         1.87 ms         1.87 ms          369
+OpenCV_Filter2D_Constant_Padding/1                      2.80 ms         2.80 ms          249
+Buddy_Resize2D_Nearest_Neighbour_Interpolation/1       0.149 ms        0.149 ms         4676
+Buddy_Resize2D_Bilinear_Interpolation/1                0.273 ms        0.273 ms         2573
+OpenCV_Resize2D_Nearest_Neighbour_Interpolation/1      0.007 ms        0.007 ms       101945
+OpenCV_Resize2D_Bilinear_Interpolation/1               0.015 ms        0.015 ms        48219
+Buddy_Erosion2D_Constant_Padding/1                     0.246 ms        0.246 ms         2797
+Buddy_Dilation2D_Constant_Padding/1                    0.254 ms        0.254 ms         2766
+Buddy_Opening2D_Constant_Padding/1                     0.386 ms        0.386 ms         1746
+Buddy_Closing2D_Constant_Padding/1                     0.409 ms        0.409 ms         1774
+Buddy_TopHat2D_Constant_Padding/1                       1.01 ms         1.01 ms          683
+Buddy_BottomHat2D_Constant_Padding/1                    1.02 ms         1.02 ms          678
+OpenCV_Erode2D_Constant_Padding/1                      0.145 ms        0.145 ms         4842
+OpenCV_Opening2D_Constant_Padding/1                    0.227 ms        0.227 ms         3067
+OpenCV_Closing2D_Constant_Padding/1                    0.229 ms        0.229 ms         3056
+OpenCV_TopHat2D_Constant_Padding/1                     0.260 ms        0.260 ms         2685
+OpenCV_BottomHat2D_Constant_Padding/1                  0.261 ms        0.261 ms         2731
+OpenCV_MorphGrad2D_Constant_Padding/1                  0.270 ms        0.270 ms         2609
+OpenCV_Dilate2D_Constant_Padding/1                     0.143 ms        0.143 ms         4928
+Saved PNG file.
+Saved PNG file.
+Saved PNG file.
+Saved PNG file.
+Saved PNG file.
+Saved PNG file.
+Saved PNG file.
+Saved PNG file.
+Saved PNG file.
+Saved PNG file.
+Saved PNG file.
+Saved PNG file.
+Saved PNG file.
+Saved PNG file.
+Saved PNG file.
+Saved PNG file.
+Saved PNG file.
+Saved PNG file.
+Saved PNG file.
+Saved PNG file.
+Saved PNG file.
+</pre></details>
