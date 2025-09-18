@@ -49,6 +49,7 @@ The graph below shows the modules of the buddy compiler.
 
 - Compiler Technologies in Deep Learning Co-Design: A Survey - [Link](https://spj.science.org/doi/10.34133/icomputing.0040)
 - AutoConfig: A Configuration-Driven Automated Mechanism for Deep Learning Compilation Optimization - [Link](https://www.jos.org.cn/jos/article/abstract/7102)
+- COMPASS: An Agent for MLIR Compilation Pass Pipeline Generation - [Link](https://link.springer.com/chapter/10.1007/978-3-031-98208-8_13)
 - Buddy Compiler @ CGO C4ML Workshop 2024 - [Poster](https://github.com/buddy-compiler/buddy-compiler.github.io/blob/master/Resources/BuddyCompiler%40C4ML2024.pdf) / [Link](https://www.c4ml.org/)
 - Buddy Compiler @ EuroLLVM 2023
     - Buddy Compiler: An MLIR-based Compilation Framework for Deep Learning Co-design - [Link](https://www.youtube.com/watch?v=EELBpBA-XCE)
