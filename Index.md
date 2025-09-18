@@ -43,7 +43,7 @@ The buddy-benchmark is a benchmark framework to evaluate domain-specific compile
 
 The graph below shows the modules of the buddy compiler.
 
-![overview](./Images/overview.png)
+![overview](./Resources/overview.png)
 
 ## Publications and Presentations
 

@@ -9,7 +9,7 @@ parent: Documentation
 As shown in following figure, the framework has open sourced two modules. One is the compiler framework to develop the compiler tool-chain, and the other is the benchmark framework to evaluate the performance. Our
 approach is implemented in the compiler framework and evaluated in the benchmark framework.
 
-![FrameworkOverview](../../Images/overview.png)
+![FrameworkOverview](../../Resources/overview.png)
 
 In the compiler framework, we integrate the LLVM project to reuse the MLIR infrastructure and LLVM backend tools. Based on the MLIR optimization driver, we implement our optimization tool to make our work benefit the MLIR ecosystem. We have also designed an auto-config mechanism to ensure that the algorithm executes on different SIMD machines efficiently. 
 

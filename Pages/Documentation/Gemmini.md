@@ -16,7 +16,7 @@ Gemmini is part of the [Chipyard](https://github.com/ucb-bar/chipyard) ecosystem
 
 ### Architecture of Gemmini
 
-<img src="../../Images/gemmini-arch.png" style="zoom: 67%;" />
+<img src="../../Resources/gemmini-arch.png" style="zoom: 67%;" />
 
 Gemmini is implemented as a RoCC accelerator with non-standard RISC-V custom instructions. The Gemmini unit uses the RoCC port of a Rocket or BOOM *tile*, and by default connects to the memory system through the System Bus (i.e., directly to the L2 cache).
 

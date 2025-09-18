@@ -7,9 +7,11 @@ url: "https://buddycompiler.com"
 baseurl: ""
 sidebar: true
 color_scheme: buddy
-logo: "./Images/buddy-compiler-logo.png"
+logo: "./Resources/buddy-compiler-logo.png"
 nav:
   - title: "Home"
     url:   /
   - title: "Benchmarks"
     url:   /benchmarks/
+  - title: "Insights"
+    url:   /insights/
