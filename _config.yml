@@ -3,7 +3,7 @@ remote_theme: zhanghb97/just-the-docs
 title: Buddy Compiler
 description: Domain Specific Compiler Infrastructure
 markdown: kramdown
-url: "https://buddycompiler.com"
+url: "https://buddy.ruyiai.org"
 baseurl: ""
 sidebar: true
 color_scheme: buddy
